@@ -4,6 +4,7 @@
  */
 package utils;
 
+import data.NetworkDevice;
 import java.util.HashMap;
 
 /**
@@ -12,26 +13,31 @@ import java.util.HashMap;
  */
 public class Vertex implements Comparable<Vertex> {
 
-    private String label;
+    private NetworkDevice device;
+    // adjList showing the the connection to which Device through which port number
     private HashMap<Vertex, Integer> adjList;
 
-    public Vertex(String lable) {
-        this.label = lable;
-        this.adjList = new HashMap<>();
+    public Vertex(NetworkDevice device) {
+        this.device = device;
+        this.adjList = new HashMap<>(device.getNumberOfPhysicalPort());
     }
 
-    public String getLabel() {
-        return label;
+    public NetworkDevice getLabel() {
+        return device;
     }
 
     public HashMap<Vertex, Integer> getAdjList() {
         return adjList;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setDevice(NetworkDevice device) {
+        this.device = device;
     }
 
+    public void addEdge(Vertex otherDevice, int portNum){
+        this.adjList.put(otherDevice, portNum);
+    }
+    
     @Override
     public int compareTo(Vertex o) {
         return -1;

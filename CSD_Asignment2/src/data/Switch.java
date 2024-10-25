@@ -4,21 +4,15 @@
  */
 package data;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Phan Sơn
  */
-public class Router extends NetworkDevice{
+public class Switch extends NetworkDevice{
     private String banner;
     private String password;
 
-    public Router() {
-        super(null, null, 0);
-    }
-
-    public Router(String name, String macAddress, int numOfPorts) {
+    public Switch(String name, String macAddress, int numOfPorts) {
         super(name, macAddress, numOfPorts);
     }
 
@@ -26,20 +20,32 @@ public class Router extends NetworkDevice{
         return banner;
     }
 
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setBanner(String banner) {
-        this.banner = banner;
+    public String getMacAddress() {
+        return macAddress;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
     
     

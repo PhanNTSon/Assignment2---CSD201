@@ -9,27 +9,23 @@ package data;
  * @author Phan Sơn
  */
 public class PhysicalPort {
+
     private String ipAddress;
-    private String macAddress;
     private String subnetMask;
     private boolean status;
 
     public PhysicalPort() {
+        this.status = false;
     }
 
-    public PhysicalPort(String ipAddress, String macAddress, String subnetMask, boolean status) {
+    public PhysicalPort(String ipAddress, String subnetMask, boolean status) {
         this.ipAddress = ipAddress;
-        this.macAddress = macAddress;
         this.subnetMask = subnetMask;
         this.status = status;
     }
 
     public String getIpAddress() {
         return ipAddress;
-    }
-
-    public String getMacAddress() {
-        return macAddress;
     }
 
     public String getSubnetMask() {
@@ -44,16 +40,12 @@ public class PhysicalPort {
         this.ipAddress = ipAddress;
     }
 
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
-    }
-
     public void setSubnetMask(String subnetMask) {
         this.subnetMask = subnetMask;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
-    }    
-    
+    }
+
 }
