@@ -34,7 +34,7 @@ public class Edge implements Comparable<Edge> {
 
     @Override
     public String toString() {
-        return "Edge{" + this.start.getLabel() + ", " + this.to.getLabel() + ", weight=" + weight + '}';
+        return "Edge{" + this.start.getDevice() + ", " + this.to.getDevice() + ", weight=" + weight + '}';
     }
 
     /**

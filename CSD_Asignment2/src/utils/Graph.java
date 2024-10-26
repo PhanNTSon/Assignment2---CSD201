@@ -4,6 +4,8 @@
  */
 package utils;
 
+import data.NetworkDevice;
+import data.PhysicalLine;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,14 +31,14 @@ public class Graph {
     /**
      * Find a specific Vertex in set Vertices.
      *
-     * @param lable
+     * @param device
      * @return
      */
-    public Vertex getVertex(String lable) {
+    public Vertex getVertex(NetworkDevice device) {
         // First turn Set into Stream
         return this.vertices.stream()
                 // Then find all vertex that have same lable
-                .filter(vertex -> vertex.getLabel().equalsIgnoreCase(lable))
+                .filter(vertex -> vertex.getDevice().getClass().equals(device.getClass()))
                 // Take out the first Element 
                 .findFirst()
                 // If there is no Element sastified filter, return null
@@ -46,72 +48,60 @@ public class Graph {
     /**
      * Add new vertex to Graph.
      *
-     * @param lable
+     * @param device
      */
-    public void addVertex(String lable) {
-        vertices.add(new Vertex(lable));
+    public void addVertex(NetworkDevice device) {
+        vertices.add(new Vertex(device));
     }
 
     /**
-     * Add edge between 2 vertices in Graph and set its weight.
+     * Get 2 vertices in Graph and connect it through the number of port on 2
+     * vertex.
      *
-     * @param vertex1
-     * @param vertex2
-     * @param weight
+     * @param device1
+     * @param device2
+     * @param portNumOfDevice1
+     * @param portNumOfDevice2
+     * @param latenecy
+     * @param bandwith
      */
-    public void addEdge(String vertex1, String vertex2, int weight) {
-        // Initiate Vertex v1 and find it in Graph
-        Vertex v1 = this.getVertex(vertex1);
-        // Initiate Vertex v2 and find it in Graph
-        Vertex v2 = this.getVertex(vertex2);
-        // If v1 is null means no Vertex have label v1 in Graph
+    public void addEdge(NetworkDevice device1, NetworkDevice device2,
+            int portNumOfDevice1, int portNumOfDevice2,
+            int latenecy, int bandwith) {
+
+        Vertex v1 = this.getVertex(device1);
+        Vertex v2 = this.getVertex(device2);
+
+        // If v1 is null means no Vertex have device1 in Graph
         if (v1 == null) {
             // Add new Vertex v1 to Graph
-            this.addVertex(vertex1);
+            this.addVertex(device1);
             // Set v1 as that new Vertex
-            v1 = this.getVertex(vertex1);
+            v1 = this.getVertex(device1);
         }
+
         // If v2 is null means no Vertex have label v2 in Graph
         if (v2 == null) {
             // Add new Vertex v2 to Graph
-            this.addVertex(vertex2);
+            this.addVertex(device2);
             // Set v2 as that new Vertex
-            v2 = this.getVertex(vertex2);
+            v2 = this.getVertex(device2);
         }
 
         // Connect 2 vertices by adding to their adjList
-        // Add v2 to v1's adjList with weight
-        v1.getAdjList().put(v2, weight);
-        // Add v1 to v2's adjList with weight
-        v2.getAdjList().put(v1, weight);
+        // Add v2 to v1's adjList with port's num
+        v1.getAdjList().put(v2, new PhysicalLine(portNumOfDevice1, bandwith, latenecy));
+        // Add v1 to v2's adjList with port's num
+        v2.getAdjList().put(v1, new PhysicalLine(portNumOfDevice2, bandwith, latenecy));
     }
 
     /**
      * Display Graph by showing all Vertices in Graph and its connection.
      */
     public void display() {
-        // Transform set vertices into Stream
-        this.vertices.stream()
-                // For each vertex
-                .forEach(vertex -> {
-                    // Display in format: Vertex -> {adjV1, w1} {adjV2, w2} ...
-                    System.out.print(vertex.getLabel() + "-> ");
-                    // Take out the adjList and transform it into a Set of Entry
-                    vertex.getAdjList().entrySet()
-                            // Transform that set into Stream
-                            .stream()
-                            // For each entry
-                            .forEach(entry -> {
-                                // Display the lable of adjVertex and the edge's weight
-                                System.out.print("{");
-                                System.out.print(entry.getKey().getLabel()
-                                        + ", "
-                                        + entry.getValue());
-                                System.out.print("} ");
-                            });
-                    System.out.println();
-                });
-
+        this.vertices.forEach(vertex -> {
+            System.out.println(vertex.toString());
+        });
     }
 
     /**
@@ -121,41 +111,27 @@ public class Graph {
      *
      * @param vertexStart
      */
-    public void BFS(String vertexStart) {
-        // Initiate Queue/ Priority Queue to store vertex
-        LinkedQueues<Vertex> queue = new LinkedQueues<>();
-        // Initiate Array to store visisted vertex
-//        List<Vertex> visitedArr = new ArrayList<>(this.vertices.size());
+    public void BFS(NetworkDevice vertexStart) {
+        LinkedQueues<Vertex> vertexQueue = new LinkedQueues<>();
         Set<Vertex> visitedArr = new HashSet<>(); // Reduce time to O(1)
-        // Get start vertex in Graph
         Vertex startVertex = this.getVertex(vertexStart);
-        // Add start vertex into Queue to start
-        queue.enQueue(startVertex);
+        vertexQueue.enQueue(startVertex);
+
         // Loop while Queue is not empty
-        while (!queue.isEmpty()) {
+        while (!vertexQueue.isEmpty()) {
             // Take out the header of Queue as current vertex 
-            Vertex currentV = queue.deQueue();
+            Vertex currentV = vertexQueue.deQueue();
             // If vertex is not visited before
             if (!visitedArr.contains(currentV)) {
-                // Visist vertex
-                System.out.print(currentV.getLabel() + " ");
-                // Add current Vertex to Array as visisted
+                System.out.print(currentV.getDevice().getName() + " ");
+
                 visitedArr.add(currentV);
                 // Add all vertices that connected to current vertex
-//                currentV.getAdjList().keySet()
-//                        .stream()
-//                        .forEach(adjVertex -> {
-//                            queue.enQueue(adjVertex);
-//                        });
-                // Using for-loop for better understanding
-                for (Vertex v : currentV.getAdjList().keySet()) {
-                    // If visitedArray not contains vertex 
-                    if (!visitedArr.contains(v)) {
-                        // Add to queue
-                        queue.enQueue(v);
-                    }
-                }
-
+                currentV.getAdjList().keySet()
+                        .stream()
+                        .forEach(adjVertex -> {
+                            vertexQueue.enQueue(adjVertex);
+                        });
             }
         }
     }
@@ -166,33 +142,23 @@ public class Graph {
      *
      * @param vertexStart
      */
-    public void DFS(String vertexStart) {
-        // Initiate Stack/ Priority Stack to store vertex
-        LinkedStack<Vertex> stack = new LinkedStack<>();
-        // Initiate Array to store visisted vertex
+    public void DFS(NetworkDevice vertexStart) {
+        LinkedStack<Vertex> vertexStack = new LinkedStack<>();
         Set<Vertex> visitedArr = new HashSet<>(); // Reduce time to O(1)
-        // Get start vertex in Graph
         Vertex startVertex = this.getVertex(vertexStart);
-        // Add start vertex into Stack to start
-        stack.push(startVertex);
-        // Loop while Queue is not empty
-        while (!stack.isEmpty()) {
-            // Take out the top of Stack as current vertex 
-            Vertex currentV = stack.pop();
+        vertexStack.push(startVertex);
+        
+        // Loop until Queue empty
+        while (!vertexStack.isEmpty()) {
+            Vertex currentV = vertexStack.pop();
             // If vertex is not visited before
             if (!visitedArr.contains(currentV)) {
-                // Visist vertex
-                System.out.print(currentV.getLabel() + " ");
-                // Add current Vertex to Array as visisted
+//                System.out.print(currentV.getLabel() + " ");
                 visitedArr.add(currentV);
                 // Add all vertices that connected to current vertex
-                for (Vertex v : currentV.getAdjList().keySet()) {
-                    // If visitedArray not contains vertex 
-                    if (!visitedArr.contains(v)) {
-                        // Add to queue
-                        stack.push(v);
-                    }
-                }
+                currentV.getAdjList().keySet().stream().forEach(adjVertex->{
+                    vertexStack.push(adjVertex);
+                });
 
             }
         }
@@ -230,7 +196,7 @@ public class Graph {
      * @param startV
      * @param desV
      */
-    public void Dijkstra(String startV, String desV) {
+    public void Dijkstra(NetworkDevice startV, NetworkDevice desV) {
         // Map <Vertex, Int> distance to store current total Distance to vertex
         HashMap<Vertex, Integer> distance = new HashMap<>();
         /*
@@ -510,32 +476,30 @@ public class Graph {
         List<String> eulerPath = new ArrayList<>();
         // Using DFS, therefore using Stack
         LinkedStack<Vertex> stack = new LinkedStack<>();
-        
+
         Vertex sV = newG.getVertex(startV);
         // Push in sV to stack
         stack.push(sV);
-        
+
         // Begin loop
-         while (!stack.isEmpty()){
-             Vertex current = stack.pop();
-             eulerPath.add(current.getLabel());
-             current.getAdjList().entrySet()
-                     .forEach(entry->{
-                         
-                     });
-         }
-        
+        while (!stack.isEmpty()) {
+            Vertex current = stack.pop();
+            eulerPath.add(current.getLabel());
+            current.getAdjList().entrySet()
+                    .forEach(entry -> {
+
+                    });
+        }
 
         return eulerPath;
     }
-    
+
     public List<String> getEulerCircuit(String startV, Graph graph) {
         Graph newG = graph;
         if (!this.checkHaveEulerCircuit()) {
             return null;
         }
         List<String> eulerCircuit = new ArrayList<>();
-        
 
         return eulerCircuit;
     }

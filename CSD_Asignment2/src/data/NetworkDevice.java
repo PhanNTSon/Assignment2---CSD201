@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Phan Sơn
  */
-public abstract class NetworkDevice {
+public abstract class NetworkDevice implements Comparable<NetworkDevice>{
     protected String name;
     protected String macAddress;
     protected ArrayList<PhysicalPort> physicalPortList;
@@ -38,5 +38,10 @@ public abstract class NetworkDevice {
     
     public PhysicalPort getPhysicalPort(int searchNum) {
         return this.physicalPortList.get(searchNum);
+    }
+
+    @Override
+    public int compareTo(NetworkDevice o) {
+        return 0;
     }
 }
