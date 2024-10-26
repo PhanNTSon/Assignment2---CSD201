@@ -43,10 +43,14 @@ public class PhysicalLine implements Comparable<PhysicalLine> {
         this.latency = latency;
     }
     
+    public double getWeight(){
+        return this.latency / this.bandwith;
+    }
+    
     @Override
     public int compareTo(PhysicalLine o) {
-        double thisWeight = this.latency / this.bandwith;
-        double otherWeight = o.getLatency() / o.getBandwith();
+        double thisWeight = this.getWeight();
+        double otherWeight = o.getWeight();
         return Double.compare(thisWeight, otherWeight);
     }
 }

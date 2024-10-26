@@ -147,7 +147,7 @@ public class Graph {
         Set<Vertex> visitedArr = new HashSet<>(); // Reduce time to O(1)
         Vertex startVertex = this.getVertex(vertexStart);
         vertexStack.push(startVertex);
-        
+
         // Loop until Queue empty
         while (!vertexStack.isEmpty()) {
             Vertex currentV = vertexStack.pop();
@@ -156,7 +156,7 @@ public class Graph {
 //                System.out.print(currentV.getLabel() + " ");
                 visitedArr.add(currentV);
                 // Add all vertices that connected to current vertex
-                currentV.getAdjList().keySet().stream().forEach(adjVertex->{
+                currentV.getAdjList().keySet().stream().forEach(adjVertex -> {
                     vertexStack.push(adjVertex);
                 });
 
@@ -189,93 +189,23 @@ public class Graph {
     }
 
     /**
-     * Dijkstra Algorithm find the shortest path. This algorithm running base on
-     * BFS and calculate the shortest path to Destination Vertex from Start
-     * Vertex.
-     *
-     * @param startV
-     * @param desV
-     */
-    public void Dijkstra(NetworkDevice startV, NetworkDevice desV) {
-        // Map <Vertex, Int> distance to store current total Distance to vertex
-        HashMap<Vertex, Integer> distance = new HashMap<>();
-        /*
-        Set all vertices in Graph as key and their value is Infinite, except for
-        start Vertex the value is 0
-         */
-        this.vertices
-                .forEach(vertex -> {
-                    distance.put(vertex, Integer.MAX_VALUE);
-                });
-        distance.put(this.getVertex(startV), 0);
-        /*
-        Map <Vertex, Vertex> previous store connection of 2 vertex as format
-        Key: next vertex, Value: current vertex
-         */
-        HashMap<Vertex, Vertex> previous = new HashMap<>();
-        previous.put(this.getVertex(desV), this.getVertex(startV));
-        // Initiate Queue cause the Algorithm work base on BFS
-        ArrayDeque<Vertex> queue = new ArrayDeque<>(19999);
-        // Initiate Array store visisted Vertices
-        ArrayList<Vertex> visitedArr = new ArrayList<>();
-        // Enqueue StartV
-        queue.addLast(this.getVertex(startV));
-        // Loop until queue is not empty
-        while (!queue.isEmpty()) {
-            queue.stream()
-                    .forEach(vertex -> {
-                        System.out.print("{" + vertex.getLabel() + "," + distance.get(vertex) + "} ");
-                    });
-            System.out.println();
-            // Get Queue header as current Vertex
-            Vertex current = queue.pollFirst();
-            // If vertex not Visited
-            if (!visitedArr.contains(current)) {
-                // Get adjList of Vertex
-                current.getAdjList()
-                        // For each entry
-                        .forEach((adjVertex, Weight) -> {
-                            // Calculate Current Total Distance
-                            int totalDistance = distance.get(current) + Weight;
-                            // If current Total Distance < distance of that vertex preivous
-                            if (totalDistance < distance.get(adjVertex)) {
-                                // Set distance of vertex as new total distance
-                                distance.put(adjVertex, totalDistance);
-                                // Put connection into previous Map
-                                previous.put(adjVertex, current);
-                            }
-                            // Enqueue unvisited vertex        
-                            if (!visitedArr.contains(adjVertex)) {
-                                queue.addLast(adjVertex);
-                            }
-                        });
-                // Add current vertex to visited array
-                visitedArr.add(current);
-
-            }
-        }
-
-    }
-
-    /**
      * Dijkstra Algorithm but using Priority Queue.
      *
-     * @param startV
-     * @param desV
+     * @param startDevice
+     * @param desDevice
+     * @return
      */
-    public void DijkstraRef(String startV, String desV) {
-        // Map <Vertex, Int> distance to store current total Distance to vertex
-        HashMap<Vertex, Integer> distance = new HashMap<>();
-        /*
-        Set all vertices in Graph as key and their value is Infinite, except for
-        start Vertex the value is 0
-         */
+    public ArrayList<Vertex> DijkstraRef(NetworkDevice startDevice, NetworkDevice desDevice) {
+        HashMap<Vertex, Double> distance = new HashMap<>();
+        Vertex startV = this.getVertex(startDevice);
+
+        // Loop through set vertices, set tag distance of every Vertex is Infitie except startVertex
         this.vertices.stream()
                 .forEach(vertex -> {
-                    if (vertex.getLabel().equalsIgnoreCase(startV)) {
-                        distance.put(vertex, 0);
+                    if (vertex.getDevice().compareTo(startDevice) == 0) {
+                        distance.put(vertex, Double.valueOf("0"));
                     } else {
-                        distance.put(vertex, Integer.MAX_VALUE);
+                        distance.put(vertex, Double.MAX_VALUE);
                     }
                 });
         /*
@@ -288,64 +218,51 @@ public class Graph {
         Comparator<Vertex> c = new Comparator<Vertex>() {
             @Override
             public int compare(Vertex o1, Vertex o2) {
-                return Integer.compare(distance.get(o1), distance.get(o2));
+                return Double.compare(distance.get(o1), distance.get(o2));
             }
         };
 
-        // Initiate Queue cause the Algorithm work base on BFS
-        PriorityQueue<Vertex> queue = new PriorityQueue<>(c);
+        PriorityQueue<Vertex> verticesPQueue = new PriorityQueue<>(c);
 
-        // Initiate Array store visisted Vertices
         ArrayList<Vertex> visitedArr = new ArrayList<>();
-        // Enqueue StartV
-        queue.add(this.getVertex(startV));
+        verticesPQueue.add(startV);
+
         // Loop until queue is not empty
-        while (!queue.isEmpty()) {
-            queue.forEach(vertex -> {
-                System.out.print("{" + vertex.getLabel() + " - " + distance.get(vertex) + "} ");
-            });
-            System.out.println();
-            // Get Queue header as current Vertex
-            Vertex current = queue.poll();
+        while (!verticesPQueue.isEmpty()) {
+
+            Vertex current = verticesPQueue.poll();
+
             // If vertex not Visited
             if (!visitedArr.contains(current)) {
                 // If at destination vertex
-                if (current.getLabel().equalsIgnoreCase(desV)) {
+                if (current.getDevice().compareTo(desDevice) == 0) {
                     // Break loop
                     break;
                 }
-
-                // Get adjList of Vertex
+                // For each entry Calculate Current Total Distance
                 current.getAdjList()
-                        // For each entry
-                        .forEach((adjVertex, Weight) -> {
-                            // Calculate Current Total Distance
-                            int totalDistance = distance.get(current) + Weight;
+                        .forEach((adjVertex, line) -> {
+                            double totalDistance = distance.get(current) + line.getWeight();
                             // If current Total Distance < distance of that vertex preivous
                             if (totalDistance < distance.get(adjVertex)) {
-                                // Set distance of vertex as new total distance
                                 distance.put(adjVertex, totalDistance);
-                                // Put connection into previous Map
                                 previous.put(adjVertex, current);
                             }
-                            // Enqueue unvisited vertex        
+
+                            // If vertex is not visited then add to queue
                             if (!visitedArr.contains(adjVertex)) {
-                                queue.add(adjVertex);
+                                verticesPQueue.add(adjVertex);
                             }
                         });
-                // Add current vertex to visited array
                 visitedArr.add(current);
 
             }
         }
-        // Take right path 
-        ArrayList<String> path = this.getPath(previous, startV, desV);
+
+        Vertex desV = this.getVertex(desDevice);
+        ArrayList<Vertex> path = this.getPath(previous, startV, desV);
         // Reverse path order
-        Collections.reverse(path);
-        // Display to screen
-        path.forEach(s -> {
-            System.out.print(s + " ->");
-        });
+        return path;
     }
 
     /**
@@ -358,29 +275,25 @@ public class Graph {
      * @param destV
      * @return
      */
-    public ArrayList<String> getPath(HashMap<Vertex, Vertex> previous, String startV, String destV) {
-        // Initiate Vertex Key
-        Vertex key = this.getVertex(destV);
-        // Initiate Array String to store path 
-        ArrayList<String> path = new ArrayList<>();
-        // Add Destination vertex to path
+    public ArrayList<Vertex> getPath(HashMap<Vertex, Vertex> previous, Vertex startV, Vertex destV) {
+
+        ArrayList<Vertex> path = new ArrayList<>();
         path.add(destV);
-        // Begin loop while current is not startV
-        while (!key.getLabel().equalsIgnoreCase(startV)) {
-            // Initiate vertex Current store the value of Key
-            Vertex current = previous.get(key);
-            // Add vertex current's label to array
-            path.add(current.getLabel());
-            // Set key = current
-            key = current;
+
+        // Begin loop until Vertex destV is equal to Vertex startV
+        while (destV.compareTo(startV) != 0) {
+            Vertex current = previous.get(destV);
+            path.add(current);
+            destV = current;
         }
+        Collections.reverse(path);
         return path;
     }
 
     /**
      * Prims Algorithm.
      */
-    public void MST_Prims(String startV) {
+    public void MST_Prims(NetworkDevice startDevice) {
         // Collected edges
         List<Edge> mst = new ArrayList<>();
         // Visited Array store Visited Vertex
