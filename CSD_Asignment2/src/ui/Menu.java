@@ -18,4 +18,15 @@ public class Menu {
         int totalOption = 4;
         return totalOption;
     }
+    
+    public static int displayRouterManagementMenu(){
+        System.out.println("----------Router Management---------");
+        System.out.println("1. Add router");
+        System.out.println("2. Remove router");
+        System.out.println("3. Connect router");
+        System.out.println("4. Update router");
+        System.out.println("5. Exit");
+        int total = 5;
+        return total;
+    }
 }

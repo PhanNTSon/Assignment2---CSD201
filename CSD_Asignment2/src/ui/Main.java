@@ -12,7 +12,6 @@ import utils.InputValidator;
  * @author Phan Sơn
  */
 public class Main {
-
     public static void main(String[] args) {
         ProgramController programController = new ProgramController();
         // Loop until user exit

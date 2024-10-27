@@ -4,10 +4,13 @@
  */
 package controller;
 
+import utils.Graph;
+
 /**
  *
  * @author Phan Sơn
  */
 public class RouterManagement {
+    private Graph routersGraph;
     
 }

@@ -6,13 +6,11 @@ package utils;
 
 import model.NetworkDevice;
 import model.PhysicalLine;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -28,13 +26,18 @@ public class Graph {
         this.vertices = new HashSet<>();
     }
 
-    public boolean isEmpty(){
+    public Set<Vertex> getVertices() {
+        return vertices;
+    }
+
+    public boolean isEmpty() {
         return this.vertices.isEmpty();
     }
-    
-    public void clear(){
+
+    public void clear() {
         this.vertices.clear();
     }
+
     /**
      * Find a specific Vertex in set Vertices.
      *
@@ -45,7 +48,7 @@ public class Graph {
         // First turn Set into Stream
         return this.vertices.stream()
                 // Then find all vertex that have same lable
-                .filter(vertex -> vertex.getDevice().getClass().equals(device.getClass()))
+                .filter(vertex -> vertex.getDevice().equals(device))
                 // Take out the first Element 
                 .findFirst()
                 // If there is no Element sastified filter, return null
@@ -53,12 +56,17 @@ public class Graph {
     }
 
     /**
-     * Add new vertex to Graph.
+     * Add new vertex to Graph. Use this if already exist a VERTEX not a NETWORK
+     * DEVICE
      *
-     * @param device
+     * @param newVertex
      */
+    public void addVertex(Vertex newVertex) {
+        vertices.add(newVertex);
+    }
+
     public void addVertex(NetworkDevice device) {
-        vertices.add(new Vertex(device));
+        this.vertices.add(new Vertex(device));
     }
 
     /**
@@ -109,6 +117,26 @@ public class Graph {
         this.vertices.forEach(vertex -> {
             System.out.println(vertex.toString());
         });
+    }
+
+    /**
+     * Remove a specific device in Graph
+     *
+     * @param device
+     * @return
+     */
+    public Vertex removeVertex(NetworkDevice device) {
+        Vertex targetV = this.getVertex(device);
+        // Check if vertex is null then return null
+        if (targetV == null) {
+            return null;
+        } else { // Else remove from vertices and from adjList in each vertex
+            this.vertices.remove(targetV);
+            for (Vertex vertex : this.vertices) {
+                vertex.getAdjList().remove(targetV);
+            }
+            return targetV;
+        }
     }
 
     /**
@@ -170,8 +198,6 @@ public class Graph {
             }
         }
     }
-
-   
 
     /**
      * Dijkstra Algorithm but using Priority Queue.
@@ -275,5 +301,4 @@ public class Graph {
         return path;
     }
 
-    
 }
