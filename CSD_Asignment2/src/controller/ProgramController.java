@@ -27,7 +27,8 @@ public class ProgramController {
 
     /**
      * Return a Graph that contains only Router.
-     * @return 
+     *
+     * @return
      */
     public Graph getRoutersGraph() {
         Graph routersGraph = new Graph();
@@ -41,10 +42,11 @@ public class ProgramController {
                 });
         return routersGraph;
     }
-    
+
     /**
      * Return a Graph that contains only End Devices.
-     * @return 
+     *
+     * @return
      */
     public Graph getEndDevicesGraph() {
         Graph endDevicesGraph = new Graph();
@@ -59,21 +61,34 @@ public class ProgramController {
         return endDevicesGraph;
     }
 
-    public void manageRouter(){
-        Graph routersGraph = this.getRoutersGraph();
-        int max_bound = Menu.displayRouterManagementMenu();
-        int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
-        switch (choice){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
+    public void manageRouter() {
+        boolean loop = true;
+        // begin loop until user exit 
+        while (loop) {
+            Graph routersGraph = this.getRoutersGraph();
+            int max_bound = Menu.displayRouterManagementMenu();
+            int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
+            switch (choice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+
+                    break;
+                default:
+                    loop = false;
+                    break;
+            }
         }
+
     }
-    
-    public void manageEndDevices(){
+
+    public void manageEndDevices() {
         Graph endDevicesGraph = this.getEndDevicesGraph();
     }
 }

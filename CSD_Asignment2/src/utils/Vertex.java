@@ -47,12 +47,20 @@ public class Vertex implements Comparable<Vertex> {
 
     @Override
     public String toString() {
+        String result = "";
+        result += "Name: " + this.getDevice().getName() + ", ";
+        result += "Mac address: " + this.getDevice().getMacAddress();
+        return result;
+    }
+    
+    public String toStringSpecific() {
         String result = "-------------------\n";
         result += "Name: " + this.getDevice().getName() + ".\n";
         result += "Mac address: " + this.getDevice().getMacAddress() + ".\n";
         result += "Number of physical ports: " + this.getDevice().getNumberOfPhysicalPort() + ".\n";
         for (Map.Entry<Vertex, PhysicalLine> entry : this.adjList.entrySet()) {
-            result += "Port [" + entry.getValue().getNumOfPortFrom() + "] " + entry.getKey().getDevice().getName() + "\n";
+            result += "Port[" + entry.getValue().getNumOfPortFrom() + "] -> " 
+                    + entry.getKey().getDevice().getName() + "\n";
         }
         return result;
     }

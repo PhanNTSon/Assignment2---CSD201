@@ -4,6 +4,7 @@
  */
 package utils;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -68,7 +69,7 @@ public class InputValidator {
      * Similar as above.
      *
      * @param mess
-     * @return 
+     * @return
      */
     public static double getDoubleInput(String mess) {
         return getDoubleInput(mess,
@@ -94,9 +95,9 @@ public class InputValidator {
     public static String getNormalString(String mess, int max_length) {
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.println(mess);
+            System.out.print(mess);
             String input = sc.nextLine();
-            if (!input.matches("[a-zA-Z0=9\\s]+")) {
+            if (!input.matches("[a-zA-Z0-9\\s]+")) {
                 System.out.println("Error. No special characters contains.");
             } else if (input.length() > max_length) {
                 System.out.println("Error. Maximum " + max_length + " characters.");
@@ -105,4 +106,59 @@ public class InputValidator {
             }
         }
     }
+
+    public static String getRouterName(String mess) {
+        return getNormalString(mess, 50);
+    }
+
+    public static String getMacAddress(ArrayList<String> macAddressList) {
+        Scanner sc = new Scanner(System.in);
+
+        int choice = getIntegerInput("Manual or random? (1 for"
+                + " manual, 2 for random)",
+                1, 2);
+        // If user want to manually enter
+        if (choice == 1) {
+            // Loop until input valid 
+            while (true) {
+
+                System.out.print("Enter MAC Address: ");
+                String input = sc.nextLine();
+                String macPattern = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
+                if (!input.matches(macPattern)) {
+                    System.out.println("Invalid MAC address.");
+                } else if (macAddressList.contains(input)) {
+                    System.out.println("Already exist MAC Address");
+                } else {
+                    return input;
+                }
+            }
+        } else {    // User want to random
+            String randomMAC = "";
+            // Loop while random is already exist list
+            do {
+                randomMAC = RandomGenerator.generateMacAddress();
+            } while (macAddressList.contains(randomMAC));
+            return randomMAC;
+        }
+
+    }
+
+    public static String getIpAddress() {
+        Scanner sc = new Scanner(System.in);
+        // Loop until input valid 
+        while (true) {
+            System.out.print("Enter MAC Address: ");
+            String input = sc.nextLine();
+            String macPattern = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
+            if (!input.matches(macPattern)) {
+                System.out.println("Invalid MAC address.");
+            } else {
+                return input;
+            }
+        }
+    }
 }
+
+// String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|[1-9]?[0-9])$";
+// 

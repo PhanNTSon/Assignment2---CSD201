@@ -10,12 +10,12 @@ package model;
  */
 public class PhysicalLine implements Comparable<PhysicalLine> {
     private int numOfPortFrom;
-    private int bandwith;
+    private int bandwidth;
     private int latency;
 
-    public PhysicalLine(int numOfPortFrom, int bandwith, int latency) {
+    public PhysicalLine(int numOfPortFrom, int bandwidth, int latency) {
         this.numOfPortFrom = numOfPortFrom;
-        this.bandwith = bandwith;
+        this.bandwidth = bandwidth;
         this.latency = latency;
     }
 
@@ -28,11 +28,11 @@ public class PhysicalLine implements Comparable<PhysicalLine> {
     }
 
     public int getBandwith() {
-        return bandwith;
+        return bandwidth;
     }
 
     public void setBandwith(int bandwith) {
-        this.bandwith = bandwith;
+        this.bandwidth = bandwith;
     }
 
     public int getLatency() {
@@ -44,7 +44,7 @@ public class PhysicalLine implements Comparable<PhysicalLine> {
     }
     
     public double getWeight(){
-        return this.latency / this.bandwith;
+        return this.latency / this.bandwidth;
     }
     
     @Override

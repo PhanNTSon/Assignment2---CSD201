@@ -38,6 +38,14 @@ public class Graph {
         this.vertices.clear();
     }
 
+    public ArrayList<Vertex> toArray() {
+        ArrayList<Vertex> array = new ArrayList<>();
+        this.vertices.stream().forEach(vertex -> {
+            array.add(vertex);
+        });
+        return array;
+    }
+
     /**
      * Find a specific Vertex in set Vertices.
      *
@@ -111,11 +119,32 @@ public class Graph {
     }
 
     /**
+     * Connect 2 existed vertex vertex.
+     *
+     * @param v1
+     * @param v2
+     * @param portNumOfDevice1
+     * @param portNumOfDevice2
+     * @param latency
+     * @param bandwidth
+     */
+    public void addEdge(Vertex v1, Vertex v2,
+            int portNumOfDevice1, int portNumOfDevice2,
+            int latency, int bandwidth) {
+
+        // Connect 2 vertices by adding to their adjList
+        // Add v2 to v1's adjList with port's num
+        v1.getAdjList().put(v2, new PhysicalLine(portNumOfDevice1, bandwidth, latency));
+        // Add v1 to v2's adjList with port's num
+        v2.getAdjList().put(v1, new PhysicalLine(portNumOfDevice2, bandwidth, latency));
+    }
+
+    /**
      * Display Graph by showing all Vertices in Graph and its connection.
      */
     public void display() {
         this.vertices.forEach(vertex -> {
-            System.out.println(vertex.toString());
+            System.out.println(vertex.toStringSpecific());
         });
     }
 
