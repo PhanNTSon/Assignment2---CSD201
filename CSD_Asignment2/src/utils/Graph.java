@@ -4,8 +4,8 @@
  */
 package utils;
 
-import data.NetworkDevice;
-import data.PhysicalLine;
+import model.NetworkDevice;
+import model.PhysicalLine;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +28,13 @@ public class Graph {
         this.vertices = new HashSet<>();
     }
 
+    public boolean isEmpty(){
+        return this.vertices.isEmpty();
+    }
+    
+    public void clear(){
+        this.vertices.clear();
+    }
     /**
      * Find a specific Vertex in set Vertices.
      *

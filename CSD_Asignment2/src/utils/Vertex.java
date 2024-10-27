@@ -4,14 +4,14 @@
  */
 package utils;
 
-import data.NetworkDevice;
-import data.PhysicalLine;
+import model.NetworkDevice;
+import model.PhysicalLine;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author ADMIN
+ * @author Phan Sơn
  */
 public class Vertex implements Comparable<Vertex> {
 

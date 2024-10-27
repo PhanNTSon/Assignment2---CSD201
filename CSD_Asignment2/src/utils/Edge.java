@@ -6,7 +6,7 @@ package utils;
 
 /**
  *
- * @author ADMIN
+ * @author Phan Sơn
  */
 public class Edge implements Comparable<Edge> {
 

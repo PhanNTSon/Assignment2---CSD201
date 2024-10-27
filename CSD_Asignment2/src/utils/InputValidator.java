@@ -4,12 +4,11 @@
  */
 package utils;
 
-import java.time.DateTimeException;
 import java.util.Scanner;
 
 /**
  *
- * @author ADMIN
+ * @author Phan Sơn
  */
 public class InputValidator {
 
@@ -69,6 +68,7 @@ public class InputValidator {
      * Similar as above.
      *
      * @param mess
+     * @return 
      */
     public static double getDoubleInput(String mess) {
         return getDoubleInput(mess,
