@@ -5,13 +5,10 @@
 package controller;
 
 import java.util.ArrayList;
-import model.DataPacket;
 import model.NetworkDevice;
-import model.PhysicalPort;
 import model.Router;
 import utils.Graph;
 import utils.InputValidator;
-import utils.RandomGenerator;
 import utils.Vertex;
 
 /**
@@ -51,36 +48,35 @@ public class RouterManagement {
     }
 
     public void displayAllRouter(Graph routerGraph) {
+        System.out.println("All routers: ");
         routerGraph.display();
     }
 
-    public void connectPhysicRouters(Graph routerGraph) {
-        ArrayList<Vertex> array = routerGraph.toArray();
+    public Vertex getRouterVertex(ArrayList<Vertex> routersArray) {
         // Display all routers with index 
-        for (int i = 0; i < array.size(); i++) {
-            System.out.println(i + ": " + array.get(i).toString());
+        for (int i = 0; i < routersArray.size(); i++) {
+            System.out.println(i + ": " + routersArray.get(i).toString());
         }
-        int choice = InputValidator.getIntegerInput("Connect from Router: ",
-                0, array.size() - 1);
-        Vertex target1 = array.get(choice);
+        int choice = InputValidator.getIntegerInput("Router: ",
+                0, routersArray.size() - 1);
+        return routersArray.get(choice);
+    }
 
+    public void connectPhysicLineRouters(Graph routerGraph) {
+        ArrayList<Vertex> array = routerGraph.toArray();
+
+        Vertex target1 = this.getRouterVertex(array);
         array.remove(target1);
 
-        // Display all routers with index 
-        for (int i = 0; i < array.size(); i++) {
-            System.out.println(i + ": " + array.get(i).toString());
-        }
-        choice = InputValidator.getIntegerInput("Connect to Router: ",
-                0, array.size() - 1);
-        Vertex target2 = array.get(choice);
+        Vertex target2 = this.getRouterVertex(array);
 
         int portNumOfRouter1 = InputValidator.getIntegerInput("Enter port "
-                + "number of Router 1 [1 - "
+                + "number of Router 1 [0 - "
                 + (target1.getDevice().getNumberOfPhysicalPort() - 1) + "]: ",
                 0, target1.getDevice().getNumberOfPhysicalPort() - 1);
 
         int portNumOfRouter2 = InputValidator.getIntegerInput("Enter port "
-                + "number of Router 2 [1 - "
+                + "number of Router 2 [0 - "
                 + (target2.getDevice().getNumberOfPhysicalPort() - 1) + "]: ",
                 0, target2.getDevice().getNumberOfPhysicalPort() - 1);
 
@@ -100,15 +96,8 @@ public class RouterManagement {
     public void configureInterfaceRouter(Graph routerGraph) {
         ArrayList<Vertex> routers = routerGraph.toArray();
 
-        // Display all routers with index
-        for (int i = 0; i < routers.size(); i++) {
-            System.out.println(i + ": " + routers.get(i).toString());
-        }
-
-        // Select router to configure
-        int routerIndex = InputValidator.getIntegerInput("Select router to configure: ",
-                0, routers.size() - 1);
-        Vertex selectedVertex = routers.get(routerIndex);
+        
+        Vertex selectedVertex = this.getRouterVertex(routers);
         Router selectedRouter = (Router) selectedVertex.getDevice();
 
         // Display available ports for selected router
@@ -137,27 +126,27 @@ public class RouterManagement {
                 + " on Port " + portIndex + " of Router " + selectedRouter.getName());
     }
 
-    public static void main(String[] args) {
-        Graph newG = new Graph();
-        RouterManagement rm = new RouterManagement();
-
-//        Router routerA = new Router("RouterA", "00:0a:95:9d:68:16", 3);
-//        Router routerB = new Router("RouterB", "00:0a:95:9d:68:17", 3);
-//        Router routerC = new Router("RouterC", "00:0a:95:9d:68:18", 3);
+//    public static void main(String[] args) {
+//        Graph newG = new Graph();
+//        RouterManagement rm = new RouterManagement();
+//
+////        Router routerA = new Router("RouterA", "00:0a:95:9d:68:16", 3);
+////        Router routerB = new Router("RouterB", "00:0a:95:9d:68:17", 3);
+////        Router routerC = new Router("RouterC", "00:0a:95:9d:68:18", 3);
+////        
+//        rm.addRouter(newG);
+//        rm.addRouter(newG);
+//        rm.addRouter(newG);
+//        // Tạo và kết nối các cổng của router
+////        routerA.addConnection(0, "192.168.1.1", "255.255.255.0", true, routerB);
+////        routerB.addConnection(0, "192.168.1.2", "255.255.255.0", true, routerA);
+////        routerB.addConnection(1, "192.168.2.1", "255.255.255.0", true, routerC);
+////        routerC.addConnection(0, "192.168.2.2", "255.255.255.0", true, routerB);
+//        rm.configureInterfaceRouter(newG);
+//        rm.configureInterfaceRouter(newG);
+//
+//        rm.displayAllRouter(newG);
+//
 //        
-        rm.addRouter(newG);
-        rm.addRouter(newG);
-        rm.addRouter(newG);
-        // Tạo và kết nối các cổng của router
-//        routerA.addConnection(0, "192.168.1.1", "255.255.255.0", true, routerB);
-//        routerB.addConnection(0, "192.168.1.2", "255.255.255.0", true, routerA);
-//        routerB.addConnection(1, "192.168.2.1", "255.255.255.0", true, routerC);
-//        routerC.addConnection(0, "192.168.2.2", "255.255.255.0", true, routerB);
-        rm.configureInterfaceRouter(newG);
-        rm.configureInterfaceRouter(newG);
-
-        rm.displayAllRouter(newG);
-
-        
-    }
+//    }
 }
