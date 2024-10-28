@@ -18,6 +18,7 @@ public class Vertex implements Comparable<Vertex> {
     private NetworkDevice device;
     // adjList showing the the connection to which Device through which port number
     private HashMap<Vertex, PhysicalLine> adjList;
+    
 
     public Vertex(NetworkDevice device) {
         this.device = device;
@@ -36,8 +37,17 @@ public class Vertex implements Comparable<Vertex> {
         this.device = device;
     }
 
-    public void addEdge(Vertex otherDevice, int portNum, int latency, int bandwith) {
-        this.adjList.put(otherDevice, new PhysicalLine(portNum, bandwith, latency));
+    public void addEdge(Vertex otherVertex, int portNum, int latency, int bandwidth) {
+        this.adjList.put(otherVertex, new PhysicalLine(portNum, bandwidth, latency));
+    }
+    
+    public Vertex getVertexFromPort(int portNum){
+        for (Map.Entry<Vertex, PhysicalLine> entry : this.adjList.entrySet()) {
+            if (entry.getValue().getNumOfPortFrom() == portNum){
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -52,14 +62,14 @@ public class Vertex implements Comparable<Vertex> {
         result += "Mac address: " + this.getDevice().getMacAddress();
         return result;
     }
-    
+
     public String toStringSpecific() {
         String result = "-------------------\n";
         result += "Name: " + this.getDevice().getName() + ".\n";
         result += "Mac address: " + this.getDevice().getMacAddress() + ".\n";
         result += "Number of physical ports: " + this.getDevice().getNumberOfPhysicalPort() + ".\n";
         for (Map.Entry<Vertex, PhysicalLine> entry : this.adjList.entrySet()) {
-            result += "Port[" + entry.getValue().getNumOfPortFrom() + "] -> " 
+            result += "Port[" + entry.getValue().getNumOfPortFrom() + "] -> "
                     + entry.getKey().getDevice().getName() + "\n";
         }
         return result;

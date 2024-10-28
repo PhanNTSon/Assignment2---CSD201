@@ -148,17 +148,63 @@ public class InputValidator {
         Scanner sc = new Scanner(System.in);
         // Loop until input valid 
         while (true) {
-            System.out.print("Enter MAC Address: ");
+            System.out.print("Enter IP Address: ");
             String input = sc.nextLine();
-            String macPattern = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
-            if (!input.matches(macPattern)) {
-                System.out.println("Invalid MAC address.");
+            String ipPattern = "^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|[1-9]?[0-9])$";
+            if (!input.matches(ipPattern)) {
+                System.out.println("Invalid IP address.");
             } else {
                 return input;
             }
         }
     }
-}
 
-// String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|[1-9]?[0-9])$";
-// 
+    public static String getSubnetMask() {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.print("Enter Subnet mask: ");
+            String input = sc.nextLine();
+            if (isValidOcteOfSubnetMask(input)) {
+                return input;
+            } else {
+                System.out.println("Invalid Subnet mask.");
+            }
+        }
+    }
+
+    public static boolean isValidOcteOfSubnetMask(String subnetMask) {
+        String[] octetsParts = subnetMask.split("\\.");
+        // If length is not 4 then return false
+        if (octetsParts.length != 4) {
+            return false;
+        }
+
+        int[] validValues = {0, 128, 192, 224, 240, 248, 252, 254, 255};
+
+        // Loop through each octet and check if, return false if one of them invalid
+        for (String octet : octetsParts) {
+
+            try {
+                int value = Integer.parseInt(octet);
+                boolean isValidOctet = false;
+
+                // Check if octet value is valid
+                for (int valid : validValues) {
+                    // If found a valid value, break loop
+                    if (value == valid) {
+                        isValidOctet = true;
+                        break;
+                    }
+                }
+
+                // If octet value is not valid then return false
+                if (!isValidOctet) {
+                    return false;
+                }
+            } catch (Exception e) { // Case can't parse Octet into number, return false
+                return false;
+            }
+        }
+        return true;
+    }
+}

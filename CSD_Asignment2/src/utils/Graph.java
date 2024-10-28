@@ -56,7 +56,7 @@ public class Graph {
         // First turn Set into Stream
         return this.vertices.stream()
                 // Then find all vertex that have same lable
-                .filter(vertex -> vertex.getDevice().equals(device))
+                .filter(vertex -> (vertex.getDevice().compareTo(device) == 0))
                 // Take out the first Element 
                 .findFirst()
                 // If there is no Element sastified filter, return null
@@ -134,9 +134,10 @@ public class Graph {
 
         // Connect 2 vertices by adding to their adjList
         // Add v2 to v1's adjList with port's num
-        v1.getAdjList().put(v2, new PhysicalLine(portNumOfDevice1, bandwidth, latency));
+        v1.addEdge(v2, portNumOfDevice1, latency, bandwidth);
         // Add v1 to v2's adjList with port's num
-        v2.getAdjList().put(v1, new PhysicalLine(portNumOfDevice2, bandwidth, latency));
+        v2.addEdge(v1, portNumOfDevice2, latency, bandwidth);
+
     }
 
     /**

@@ -48,4 +48,8 @@ public class PhysicalPort {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "["+this.ipAddress + " | " + this.subnetMask + " | " + this.status + "]";
+    }
 }
