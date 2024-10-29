@@ -8,12 +8,18 @@ package model;
  *
  * @author Phan Sơn
  */
-public class Laptop extends NetworkDevice{
+public class Laptop extends NetworkDevice {
+
     private String password;
 
     public Laptop(String name, String macAddress, int numOfPorts) {
         super(name, macAddress, numOfPorts);
     }
-    
-    
+// ------------------------------------------------------------------
+/*
+    Quang worksite inside here. Responsible for Class Laptop
+    */
+
+// ------------------------------------------------------------------
+
 }

@@ -9,5 +9,10 @@ package controller;
  * @author Phan Sơn
  */
 public class DNSManagement {
-    
+    //-----------------------------------------------------------
+    /*
+    Duong + Đạt Worksite here. Responsible for DNS Management
+    */
+        //-----------------------------------------------------------
+
 }
