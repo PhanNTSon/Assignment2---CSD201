@@ -11,19 +11,15 @@ package model;
 public class DataPacket {
     private String srcIP;
     private String destIP;
-    private String srcMAC;
-    private String destMAC;
     private int ttl;
     private String contentData;
 
     public DataPacket() {
     }
 
-    public DataPacket(String srcIP, String destIP, String srcMAC, String destMAC, int ttl) {
+    public DataPacket(String srcIP, String destIP, int ttl) {
         this.srcIP = srcIP;
         this.destIP = destIP;
-        this.srcMAC = srcMAC;
-        this.destMAC = destMAC;
         this.ttl = ttl;
     }
 
@@ -41,22 +37,6 @@ public class DataPacket {
 
     public void setDestIP(String destIP) {
         this.destIP = destIP;
-    }
-
-    public String getSrcMAC() {
-        return srcMAC;
-    }
-
-    public void setSrcMAC(String srcMAC) {
-        this.srcMAC = srcMAC;
-    }
-
-    public String getDestMAC() {
-        return destMAC;
-    }
-
-    public void setDestMAC(String destMAC) {
-        this.destMAC = destMAC;
     }
 
     public int getTtl() {

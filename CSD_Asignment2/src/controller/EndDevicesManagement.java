@@ -29,7 +29,7 @@ public class EndDevicesManagement {
 
         endDevicesGraph.addVertex(new Laptop(name, macAddress, numOfPhysicalPort));
     }
-    
+
     public void removeEndDevice(Graph endDevicesGraph) {
         ArrayList<Vertex> array = endDevicesGraph.toArray();
         // Display all routers with index 
@@ -46,7 +46,7 @@ public class EndDevicesManagement {
         System.out.println("All routers: ");
         endDevicesGraph.display();
     }
-    
+
     public Vertex getDeviceVertex(ArrayList<Vertex> devicesArray) {
         // Display all routers with index 
         for (int i = 0; i < devicesArray.size(); i++) {
@@ -56,7 +56,7 @@ public class EndDevicesManagement {
                 0, devicesArray.size() - 1);
         return devicesArray.get(choice);
     }
-    
+
     public void connectPhysicLineDevice(Graph networkGraph) {
         ArrayList<Vertex> array = networkGraph.toArray();
 
@@ -87,4 +87,26 @@ public class EndDevicesManagement {
                 latency, bandwidth);
 
     }
+
+    
+    
+    public void loginLaptop(Graph endDevicesGraph) {
+        // Transfer graph into Array
+        ArrayList<Vertex> laptopArray = endDevicesGraph.toArray();
+
+        // Display list 
+        for (int i = 0; i < laptopArray.size(); i++) {
+            System.out.println(i + laptopArray.get(i).toString());
+        }
+
+        // Get laptop user want to login
+        int choice = InputValidator.getIntegerInput("Enter Laptop want to "
+                + "login: ", 0, laptopArray.size() - 1);
+
+        Laptop target = (Laptop) laptopArray.get(choice).getDevice();
+
+        target.login();
+    }
+    
+    
 }

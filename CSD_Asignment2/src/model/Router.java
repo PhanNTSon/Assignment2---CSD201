@@ -5,7 +5,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import utils.Graph;
 
 /**
@@ -65,50 +68,5 @@ public class Router extends NetworkDevice {
         }
     }
 
-    public void addConnection(int numOfPort, String ipAddress, String subnetMask, boolean status, NetworkDevice otherDevice) {
-        PhysicalPort portTarget = this.physicalPortList.get(numOfPort);
-        portTarget.setIpAddress(ipAddress);
-        portTarget.setSubnetMask(subnetMask);
-        portTarget.setStatus(status);
-        this.routingTable.put(portTarget, otherDevice);
-    }
-
-    public void transmitDataPacket(DataPacket packet) {
-        System.out.println("Router: " + this.name + " received packet destined for " + packet.getDestIP());
-
-        // Step 1: Check TTL
-        if (packet.getTtl() <= 0) {
-            System.out.println("Packet dropped: TTL expired.");
-            return;
-        }
-
-        // Step 2: Check if this router is the destination
-        boolean destinationFound = false;
-        for (PhysicalPort port : physicalPortList) {
-            if (port.getIpAddress() != null && port.getIpAddress().equals(packet.getDestIP())) {
-                destinationFound = true;
-                break;
-            }
-        }
-
-        if (destinationFound) {
-            System.out.println("Packet has reached its destination: " + this.name);
-            System.out.println("Packet content: " + packet.getContentData());
-            return;
-        }
-
-        // Step 3: Forward packet to the next router in routing table
-        NetworkDevice nextRouter = routingTable.values().stream()
-                .filter(device -> device instanceof Router)
-                .findFirst().orElse(null);
-
-        if (nextRouter != null) {
-            packet.setTtl(packet.getTtl() - 1); // Decrease TTL
-            System.out.println("Forwarding packet from " + this.name + " to " + nextRouter.getName());
-            ((Router) nextRouter).transmitDataPacket(packet);
-        } else {
-            System.out.println("No route found to destination. Packet dropped.");
-        }
-    }
-
+    
 }

@@ -45,4 +45,5 @@ public class DNS extends NetworkDevice {
         return result;
     }
 
+    
 }

@@ -126,27 +126,4 @@ public class RouterManagement {
                 + " on Port " + portIndex + " of Router " + selectedRouter.getName());
     }
 
-//    public static void main(String[] args) {
-//        Graph newG = new Graph();
-//        RouterManagement rm = new RouterManagement();
-//
-////        Router routerA = new Router("RouterA", "00:0a:95:9d:68:16", 3);
-////        Router routerB = new Router("RouterB", "00:0a:95:9d:68:17", 3);
-////        Router routerC = new Router("RouterC", "00:0a:95:9d:68:18", 3);
-////        
-//        rm.addRouter(newG);
-//        rm.addRouter(newG);
-//        rm.addRouter(newG);
-//        // Tạo và kết nối các cổng của router
-////        routerA.addConnection(0, "192.168.1.1", "255.255.255.0", true, routerB);
-////        routerB.addConnection(0, "192.168.1.2", "255.255.255.0", true, routerA);
-////        routerB.addConnection(1, "192.168.2.1", "255.255.255.0", true, routerC);
-////        routerC.addConnection(0, "192.168.2.2", "255.255.255.0", true, routerB);
-//        rm.configureInterfaceRouter(newG);
-//        rm.configureInterfaceRouter(newG);
-//
-//        rm.displayAllRouter(newG);
-//
-//        
-//    }
 }

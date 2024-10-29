@@ -10,18 +10,30 @@ package model;
  */
 public class PhysicalPort {
 
+    private int numOfPortInDevice;
     private String ipAddress;
     private String subnetMask;
     private boolean status;
 
-    public PhysicalPort() {
-        this.status = false;
+    public PhysicalPort(int numOfPortInDevice) {
+        this.numOfPortInDevice = numOfPortInDevice;
+        this.status = true;
     }
 
-    public PhysicalPort(String ipAddress, String subnetMask, boolean status) {
+    
+    public PhysicalPort(int numOfPortInDevice, String ipAddress, String subnetMask) {
+        this.numOfPortInDevice = numOfPortInDevice;
         this.ipAddress = ipAddress;
         this.subnetMask = subnetMask;
-        this.status = status;
+        this.status = true;
+    }
+
+    public int getNumOfPortInDevice() {
+        return numOfPortInDevice;
+    }
+
+    public void setNumOfPortInDevice(int numOfPortInDevice) {
+        this.numOfPortInDevice = numOfPortInDevice;
     }
 
     public String getIpAddress() {

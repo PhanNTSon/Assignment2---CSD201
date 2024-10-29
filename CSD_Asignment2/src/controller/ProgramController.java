@@ -35,10 +35,10 @@ public class ProgramController {
         Graph routersGraph = new Graph();
         // Loop through networkGraph and take out Vertex have device instance of Router
         this.networkGraph.getVertices().stream()
-                .forEach(vertex -> {
-                    // If vertex is instance of Router then add to Temp graph
-                    if (vertex.getDevice() instanceof Router) {
-                        routersGraph.addVertex(vertex);
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Router) {
+                        routersGraph.addNetworkDevice(device);
                     }
                 });
         return routersGraph;
@@ -53,10 +53,10 @@ public class ProgramController {
         Graph endDevicesGraph = new Graph();
         // Loop through networkGraph and take out Vertex have device instance of Laptop
         this.networkGraph.getVertices().stream()
-                .forEach(vertex -> {
-                    // If vertex is instance of Router then add to Temp graph
-                    if (vertex.getDevice() instanceof Laptop) {
-                        endDevicesGraph.addVertex(vertex);
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Laptop) {
+                        endDevicesGraph.addNetworkDevice(device);
                     }
                 });
         return endDevicesGraph;
@@ -71,10 +71,10 @@ public class ProgramController {
         Graph DNSGraph = new Graph();
         // Loop through networkGraph and take out Vertex have device instance of Laptop
         this.networkGraph.getVertices().stream()
-                .forEach(vertex -> {
-                    // If vertex is instance of Router then add to Temp graph
-                    if (vertex.getDevice() instanceof DNS) {
-                        DNSGraph.addVertex(vertex);
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof DNS) {
+                        DNSGraph.addNetworkDevice(device);
                     }
                 });
         return DNSGraph;
