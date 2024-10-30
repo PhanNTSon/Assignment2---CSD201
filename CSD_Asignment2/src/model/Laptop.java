@@ -12,14 +12,43 @@ public class Laptop extends NetworkDevice {
 
     private String password;
 
-    public Laptop(String name, String macAddress, int numOfPorts) {
-        super(name, macAddress, numOfPorts);
+    public Laptop(String name, String macAddress, String publicIP) {
+        super(name, macAddress, publicIP);
     }
 // ------------------------------------------------------------------
 /*
-    Quang worksite inside here. Responsible for Class Laptop
+    Quang + Duong + Dat worksite inside here. Responsible for Class Laptop
     */
+    /**
+     * 
+     * @author 
+     * @param otherDevice
+     * @param line
+     * @return 
+     */
+    @Override
+    public boolean addEdge(NetworkDevice otherDevice, PhysicalLine line) {
+    }
+
+    @Override
+    public boolean removeEdge(NetworkDevice otherDevice) {
+    }
+
+    @Override
+    public void recieveData(DataPacket packet) {
+    }
+
+    @Override
+    public void forwardData(DataPacket packet) {
+    }
+    
+    public void sendingEmails(){
+        // Create Data Packet
+        // Forward Data Packet
+    }
 
 // ------------------------------------------------------------------
+
+    
 
 }
