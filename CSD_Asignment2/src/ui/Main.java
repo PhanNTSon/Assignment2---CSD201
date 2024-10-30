@@ -26,9 +26,6 @@ public class Main {
                     programController.manageEndDevices();
                     break;
                 case 3:
-                    programController.manageDNS();
-                    break;
-                case 4:
                     System.exit(0);
             }
         }

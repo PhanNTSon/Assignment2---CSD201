@@ -13,9 +13,8 @@ public class Menu {
         System.out.println("----------Network Simulator Program---------");
         System.out.println("1. Routers Management");
         System.out.println("2. End Devices Management");
-        System.out.println("3. Domain Name Services (DNS) Management");
-        System.out.println("4. Exit");
-        int totalOption = 4;
+        System.out.println("3. Exit");
+        int totalOption = 3;
         return totalOption;
     }
     
@@ -24,9 +23,8 @@ public class Menu {
         System.out.println("1. Add router");
         System.out.println("2. Remove router");
         System.out.println("3. Connect router");
-        System.out.println("4. Update router");
-        System.out.println("5. Exit");
-        int total = 5;
+        System.out.println("4. Exit");
+        int total = 4;
         return total;
     }
 }

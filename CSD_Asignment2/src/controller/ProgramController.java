@@ -4,6 +4,7 @@
  */
 package controller;
 
+import java.util.ArrayList;
 import utils.Graph;
 import model.*;
 import ui.Menu;
@@ -16,12 +17,15 @@ import utils.InputValidator;
 public class ProgramController {
 
     private Graph networkGraph;
+    private ArrayList<String> publicIPList;
+    private ArrayList<String> macAddressList;
     private RouterManagement routerMan;
     private EndDevicesManagement endDeviceMan;
-    
 
     public ProgramController() {
         this.networkGraph = new Graph();
+        this.publicIPList = new ArrayList<>();
+        this.macAddressList = new ArrayList<>();
         this.routerMan = new RouterManagement();
         this.endDeviceMan = new EndDevicesManagement();
     }
@@ -62,24 +66,6 @@ public class ProgramController {
         return endDevicesGraph;
     }
 
-    /**
-     * Return a Graph that contains only End Devices.
-     *
-     * @return
-     */
-    public Graph getDNSGraph() {
-        Graph DNSGraph = new Graph();
-        // Loop through networkGraph and take out Vertex have device instance of Laptop
-        this.networkGraph.getVertices().stream()
-                .forEach(device -> {
-                    // If device is instance of Router then add to Temp graph
-                    if (device instanceof DNS) {
-                        DNSGraph.addNetworkDevice(device);
-                    }
-                });
-        return DNSGraph;
-    }
-
     public void manageRouter() {
         boolean loop = true;
         // begin loop until user exit 
@@ -89,7 +75,7 @@ public class ProgramController {
             int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
             switch (choice) {
                 case 1:
-                    
+
                     break;
                 case 2:
                     break;
@@ -112,7 +98,4 @@ public class ProgramController {
         Graph endDevicesGraph = this.getEndDevicesGraph();
     }
 
-    public void manageDNS() {
-        Graph DNSGraph = this.getDNSGraph();
-    }
 }

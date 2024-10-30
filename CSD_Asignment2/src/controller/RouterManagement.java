@@ -5,11 +5,12 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 import model.NetworkDevice;
+import model.PhysicalLine;
 import model.Router;
 import utils.Graph;
 import utils.InputValidator;
-import utils.Vertex;
 
 /**
  *
@@ -17,113 +18,63 @@ import utils.Vertex;
  */
 public class RouterManagement {
 
-    private ArrayList<String> macAddressList;
+    public void addRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+        String newName = InputValidator.getRouterName("Enter new Name: ");
+        String newMac = InputValidator.getMacAddress(macAddressList);
+        String newIp = InputValidator.getIpAddress(publicIPList);
 
-    public RouterManagement() {
-        this.macAddressList = new ArrayList<>();
+        Router newR = new Router(newName, newMac, newIp, networkGraph);
+        networkGraph.addNetworkDevice(newR);
     }
 
-    public ArrayList<String> getMacAddressList() {
-        return this.macAddressList;
-    }
+    public void removeRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+        ArrayList<NetworkDevice> routerList = new ArrayList<>();
+        networkGraph.getVertices().stream().forEach(vertex -> {
+            if (vertex instanceof Router) {
+                routerList.add(vertex);
+            }
+        });
 
-    public void addRouter(Graph routerGraph) {
-        String name = InputValidator.getRouterName("Enter Router name: ");
-        String macAddress = InputValidator.getMacAddress(this.macAddressList);
-        int numOfPhysicalPort = InputValidator.getIntegerInput("Enter number of ports for Router: ");
-
-        routerGraph.addVertex(new Router(name, macAddress, numOfPhysicalPort));
-    }
-
-    public void removeRouter(Graph routerGraph) {
-        ArrayList<Vertex> array = routerGraph.toArray();
-        // Display all routers with index 
-        for (int i = 0; i < array.size(); i++) {
-            System.out.println(i + array.get(i).toString());
+        for (int i = 0; i < routerList.size(); i++) {
+            System.out.println(i + ": " + routerList.get(i).toString());
         }
-        int choice = InputValidator.getIntegerInput("Enter Router want to "
-                + "remove: ", 0, array.size() - 1);
-        Vertex target = array.get(choice);
-        routerGraph.removeVertex(target.getDevice());
+
+        int targetInd = InputValidator.getIntegerInput("Enter index of Router to remove: ", 0, routerList.size() - 1);
+        NetworkDevice target = routerList.get(targetInd);
+        networkGraph.removeNetworkDevice(target);
+        macAddressList.remove(target.getMacAddress());
+        publicIPList.remove(target.getPublicIP());
     }
 
-    public void displayAllRouter(Graph routerGraph) {
-        System.out.println("All routers: ");
-        routerGraph.display();
-    }
+    public void connectRouter(Graph networkGraph) {
+        ArrayList<NetworkDevice> routerList = new ArrayList<>();
+        networkGraph.getVertices().stream().forEach(vertex -> {
+            if (vertex instanceof Router) {
+                routerList.add(vertex);
+            }
+        });
 
-    public Vertex getRouterVertex(ArrayList<Vertex> routersArray) {
-        // Display all routers with index 
-        for (int i = 0; i < routersArray.size(); i++) {
-            System.out.println(i + ": " + routersArray.get(i).toString());
+        // Get Router 1
+        for (int i = 0; i < routerList.size(); i++) {
+            System.out.println(i + ": " + routerList.get(i).toString());
         }
-        int choice = InputValidator.getIntegerInput("Router: ",
-                0, routersArray.size() - 1);
-        return routersArray.get(choice);
-    }
+        int targetInd = InputValidator.getIntegerInput("Enter index of Router 1: ", 0, routerList.size() - 1);
+        NetworkDevice router1 = routerList.get(targetInd);
 
-    public void connectPhysicLineRouters(Graph routerGraph) {
-        ArrayList<Vertex> array = routerGraph.toArray();
+        routerList.remove(router1);
 
-        Vertex target1 = this.getRouterVertex(array);
-        array.remove(target1);
+        // Get Router 2
+        for (int i = 0; i < routerList.size(); i++) {
+            System.out.println(i + ": " + routerList.get(i).toString());
+        }
+        targetInd = InputValidator.getIntegerInput("Enter index of Router 2: ", 0, routerList.size() - 1);
+        NetworkDevice router2 = routerList.get(targetInd);
 
-        Vertex target2 = this.getRouterVertex(array);
-
-        int portNumOfRouter1 = InputValidator.getIntegerInput("Enter port "
-                + "number of Router 1 [0 - "
-                + (target1.getDevice().getNumberOfPhysicalPort() - 1) + "]: ",
-                0, target1.getDevice().getNumberOfPhysicalPort() - 1);
-
-        int portNumOfRouter2 = InputValidator.getIntegerInput("Enter port "
-                + "number of Router 2 [0 - "
-                + (target2.getDevice().getNumberOfPhysicalPort() - 1) + "]: ",
-                0, target2.getDevice().getNumberOfPhysicalPort() - 1);
-
-        int latency = InputValidator.getIntegerInput("Enter latency(ms): ",
-                0, Integer.MAX_VALUE);
-
-        int bandwidth = InputValidator.getIntegerInput("Enter bandwidth: ",
-                0, Integer.MAX_VALUE);
-
-        // Connect physical Line on graph
-        routerGraph.addEdge(target1, target2,
-                portNumOfRouter1, portNumOfRouter2,
-                latency, bandwidth);
-
-    }
-
-    public void configureInterfaceRouter(Graph routerGraph) {
-        ArrayList<Vertex> routers = routerGraph.toArray();
-
+        int bandwidth = InputValidator.getIntegerInput("Enter Bandwidth: ", 0, Integer.MAX_VALUE);
+        int latency = InputValidator.getIntegerInput("Enter Latency: ", 0, Integer.MAX_VALUE);
         
-        Vertex selectedVertex = this.getRouterVertex(routers);
-        Router selectedRouter = (Router) selectedVertex.getDevice();
-
-        // Display available ports for selected router
-        for (int i = 0; i < selectedRouter.getNumberOfPhysicalPort(); i++) {
-            System.out.println("Port " + i + ": " + selectedRouter.getPhysicalPort(i).toString());
-        }
-
-        // Select port to configure
-        int portIndex = InputValidator.getIntegerInput("Select port to configure: ",
-                0, selectedRouter.getNumberOfPhysicalPort() - 1);
-
-        // Get IP and subnet mask from user
-        String ipAddress = InputValidator.getIpAddress();
-        String subnetMask = InputValidator.getSubnetMask();
-
-        // Configure IP and subnet mask
-        Vertex vertexHasConnected = selectedVertex.getVertexFromPort(portIndex);
-        if (vertexHasConnected == null) {
-            selectedRouter.addConnection(portIndex, ipAddress, subnetMask, true, null);
-        } else {
-            NetworkDevice otherDevice = vertexHasConnected.getDevice();
-            selectedRouter.addConnection(portIndex, ipAddress, subnetMask, true, otherDevice);
-        }
-
-        System.out.println("Configuration complete: IP " + ipAddress + " / Subnet Mask " + subnetMask
-                + " on Port " + portIndex + " of Router " + selectedRouter.getName());
+        networkGraph.addEdge(router1, router2, latency, bandwidth);
     }
-
+    
+    
 }

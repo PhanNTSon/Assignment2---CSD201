@@ -15,16 +15,22 @@ public abstract class NetworkDevice implements Comparable<NetworkDevice> {
 
     protected String name;
     protected String macAddress;
-    protected HashMap<NetworkDevice, ConnectionDetail> adjList;
+    protected String publicIP;
+    protected HashMap<NetworkDevice, PhysicalLine> adjList;
 
-    public NetworkDevice(String name, String macAddress, int numOfPorts) {
+    public NetworkDevice(String name, String macAddress, String publicIP) {
         this.name = name;
         this.macAddress = macAddress;
-        this.adjList = new HashMap<>(numOfPorts);
+        this.publicIP = publicIP;
+        this.adjList = new HashMap<>();
     }
 
-    public HashMap<NetworkDevice, ConnectionDetail> getAdjList() {
+    public HashMap<NetworkDevice, PhysicalLine> getAdjList() {
         return adjList;
+    }
+
+    public String getPublicIP() {
+        return publicIP;
     }
 
     public String getName() {
@@ -39,34 +45,30 @@ public abstract class NetworkDevice implements Comparable<NetworkDevice> {
         return this.adjList.size();
     }
 
-    public PhysicalPort getPhysicalPort(int searchNum) {
-        return this.adjList.values().stream()
-                .filter(connect -> (
-                        connect.getPort().getNumOfPortInDevice() == searchNum))
-                .findFirst().orElse(null).getPort();
-    }
-
-     /**
+    /**
      * Connects to another device if there is no existing connection.
-     * 
+     *
      * @param otherDevice The device to connect to.
-     * @param port        The physical port used for the connection.
-     * @param line        The physical line attributes.
+     * @param line The physical line attributes.
      * @return true if connection is successful, false if it already exists.
      */
-    public boolean addEdge(NetworkDevice otherDevice, PhysicalPort port, PhysicalLine line) {
-        // Check if there's already a connection to the other device
-        if (this.adjList.containsKey(otherDevice)) {
-            return false; // Prevent duplicate connection
-        }
+    public abstract boolean addEdge(NetworkDevice otherDevice, PhysicalLine line);
 
-        // Add new connection
-        this.adjList.put(otherDevice, new ConnectionDetail(port, line));
-        return true;
-    }
+    public abstract boolean removeEdge(NetworkDevice otherDevice);
+    
+    public abstract void recieveData(DataPacket packet);
+    
+    public abstract void forwardData(DataPacket packet);
     
     @Override
     public int compareTo(NetworkDevice o) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "NetworkDevice{" + "name: " + name + ", macAddress: " + macAddress + ", publicIP: " + publicIP + '}';
+    }
+    
+    
 }

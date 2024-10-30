@@ -7,13 +7,8 @@ package utils;
 import model.NetworkDevice;
 import model.PhysicalLine;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.PriorityQueue;
 import java.util.Set;
-import model.PhysicalPort;
 
 /**
  *
@@ -43,9 +38,15 @@ public class Graph {
         return new ArrayList<>(this.vertices);
     }
 
-    public NetworkDevice getNetworkDevice(NetworkDevice device) {
+    public NetworkDevice getNetworkDeviceByIP(String searchIP) {
         return this.vertices.stream()
-                .filter(vertex -> vertex.equals(device))
+                .filter(vertex -> (vertex.getPublicIP().equalsIgnoreCase(searchIP)))
+                .findFirst()
+                .orElse(null);
+    }
+    public NetworkDevice getNetworkDevice(NetworkDevice searchDevice) {
+        return this.vertices.stream()
+                .filter(vertex -> (vertex.compareTo(searchDevice) == 0))
                 .findFirst()
                 .orElse(null);
     }
@@ -55,7 +56,6 @@ public class Graph {
     }
 
     public void addEdge(NetworkDevice device1, NetworkDevice device2,
-            int portNumOfDevice1, int portNumOfDevice2,
             int latency, int bandwidth) {
 
         NetworkDevice v1 = this.getNetworkDevice(device1);
@@ -71,8 +71,8 @@ public class Graph {
             v2 = this.getNetworkDevice(device2);
         }
 
-        v1.addEdge(v2, new PhysicalPort(portNumOfDevice1), new PhysicalLine(portNumOfDevice1, bandwidth, latency));
-        v2.addEdge(v1, new PhysicalPort(portNumOfDevice2), new PhysicalLine(portNumOfDevice2, bandwidth, latency));
+        v1.addEdge(v2, new PhysicalLine(bandwidth, latency));
+        v2.addEdge(v1, new PhysicalLine(bandwidth, latency));
 
     }
 
