@@ -82,7 +82,7 @@ public class ProgramController {
                     routerMan.removeRouter(networkGraph, macAddressList, publicIPList);
                     break;
                 case 3:
-                    routerMan.connectRouter(networkGraph);
+                    routerMan.connectRouter(routersGraph);
                     break;
                 case 4:
                     routerMan.displayAllRouter(routersGraph);

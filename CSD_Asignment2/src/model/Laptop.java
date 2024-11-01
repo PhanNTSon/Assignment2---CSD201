@@ -18,13 +18,12 @@ public class Laptop extends NetworkDevice {
 // ------------------------------------------------------------------
 /*
     Quang + Duong + Dat worksite inside here. Responsible for Class Laptop
-    */
+     */
     /**
-     * 
-     * @author 
-     * @param otherDevice
+     *
+     * @author @param otherDevice
      * @param line
-     * @return 
+     * @return
      */
     @Override
     public boolean addEdge(NetworkDevice otherDevice, PhysicalLine line) {
@@ -41,17 +40,15 @@ public class Laptop extends NetworkDevice {
     @Override
     public void forwardData(DataPacket packet) {
     }
-    
-    public void sendingEmails(){
+
+    public void sendingEmails() {
         // Create Data Packet
         // Forward Data Packet
     }
 
 // ------------------------------------------------------------------
+    public void login() {
 
-    public void login(){
-        
     }
-    
 
 }

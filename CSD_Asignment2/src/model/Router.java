@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 import utils.Graph;
 import utils.InputValidator;
@@ -197,8 +198,6 @@ public class Router extends NetworkDevice {
         }
         return -1;
     }
-    
-    
 
 //    public static void main(String[] args) {
 //        Graph networkGraph = new Graph();
@@ -218,9 +217,21 @@ public class Router extends NetworkDevice {
 //        pck.setContentData("HEllo btich");
 //        r1.recieveData(pck);
 //    }
-
     @Override
     public String toString() {
-        return "Router{" + '}';
+        String result = "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP + "\n";
+        for (Map.Entry<NetworkDevice, PhysicalLine> entry : this.adjList.entrySet()) {
+            result += "-> " + "Router: " + entry.getKey().getName()
+                    + ", MAC Address: " + entry.getKey().getMacAddress()
+                    + ", IP Address: " + entry.getKey().getPublicIP()
+                    + " Latency: " + entry.getValue().getLatency() + "(ms)"
+                    + "Bandwidth: " + entry.getValue().getBandwith()
+                    + "\n";
+        }
+        return result;
+    }
+
+    public String toStringPartly() {
+        return "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP;
     }
 }
