@@ -4,12 +4,9 @@
  */
 package model;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
-=======
 import java.util.HashMap;
->>>>>>> fc2aef736a21f1e8727bc9e25812cc2394817cbc
 
 /**
  *
@@ -18,19 +15,11 @@ import java.util.HashMap;
 public class Laptop extends NetworkDevice {
 
     private String password;
-<<<<<<< HEAD
     private List<DataPacket> receivedPackets;
 
     public Laptop(String name, String macAddress, String publicIP) {
         super(name, macAddress, publicIP);
         this.receivedPackets = new ArrayList<>();
-=======
-    private HashMap<NetworkDevice, PhysicalLine> adjList;
-
-    public Laptop(String name, String macAddress, String publicIP) {
-        super(name, macAddress, publicIP);
-        this.adjList = new HashMap<>();
->>>>>>> fc2aef736a21f1e8727bc9e25812cc2394817cbc
     }
 
 // ------------------------------------------------------------------
@@ -38,34 +27,31 @@ public class Laptop extends NetworkDevice {
     Quang + Duong + Dat worksite inside here. Responsible for Class Laptop
      */
     /**
-<<<<<<< HEAD
      *
      * @author @param otherDevice
-=======
-     * 
+     *
      * @author le tien dat
      * @param otherDevice
      * @param line
-     * @return 
+     * @return
      */
-    
-    @Override        
-    public boolean addEdge(NetworkDevice otherDevice, PhysicalLine line) {       
+    @Override
+    public boolean addEdge(NetworkDevice otherDevice, PhysicalLine line) {
         //adjlist save connect from laptop to otherdevice, checking device connected otherdevice         
         if (adjList.containsKey(otherDevice)) {
-            System.out.println("Already connected to " + otherDevice.getName());           
-            return false; 
+            System.out.println("Already connected to " + otherDevice.getName());
+            return false;
         }
         //add new connect in adjlist, device conect to otherdevice through line
         adjList.put(otherDevice, line);
         System.out.println("Connected to " + otherDevice.getName());
-            return true;
+        return true;
     }
-/**
-     * 
+
+    /**
+     *
      * @author le tien dat
      * @param otherDevice
->>>>>>> fc2aef736a21f1e8727bc9e25812cc2394817cbc
      * @param line
      * @return
      */
@@ -78,7 +64,7 @@ public class Laptop extends NetworkDevice {
         //disconnect 
         adjList.remove(otherDevice);
         System.out.println("Disconnected from " + otherDevice.getName());
-            return true;
+        return true;
     }
 
     /**
@@ -100,14 +86,10 @@ public class Laptop extends NetworkDevice {
      */
     @Override
     public void forwardData(DataPacket packet) {
-        ((Router)adjList.keySet().toArray()[0]).recieveData(packet);
+        ((Router) adjList.keySet().toArray()[0]).recieveData(packet);
     }
-<<<<<<< HEAD
 
     public void sendingEmails() {
-=======
-    public void sendingEmails(){
->>>>>>> fc2aef736a21f1e8727bc9e25812cc2394817cbc
         // Create Data Packet
         // Forward Data Packet
     }
