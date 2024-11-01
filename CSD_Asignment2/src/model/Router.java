@@ -197,6 +197,8 @@ public class Router extends NetworkDevice {
         }
         return -1;
     }
+    
+    
 
 //    public static void main(String[] args) {
 //        Graph networkGraph = new Graph();
@@ -216,4 +218,9 @@ public class Router extends NetworkDevice {
 //        pck.setContentData("HEllo btich");
 //        r1.recieveData(pck);
 //    }
+
+    @Override
+    public String toString() {
+        return "Router{" + '}';
+    }
 }

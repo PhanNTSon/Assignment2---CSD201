@@ -49,6 +49,9 @@ public class Laptop extends NetworkDevice {
 
 // ------------------------------------------------------------------
 
+    public void login(){
+        
+    }
     
 
 }

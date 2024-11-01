@@ -6,9 +6,9 @@ package controller;
 
 import java.util.ArrayList;
 import model.Laptop;
+import model.NetworkDevice;
 import utils.Graph;
 import utils.InputValidator;
-import utils.Vertex;
 
 /**
  *
@@ -16,83 +16,39 @@ import utils.Vertex;
  */
 public class EndDevicesManagement {
 
-    private ArrayList<String> macAddressList;
-
-    public EndDevicesManagement() {
-        this.macAddressList = new ArrayList<>();
-    }
-
-    public void addLaptop(Graph endDevicesGraph) {
+    public void addLaptop(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList, String subnet) {
         String name = InputValidator.getRouterName("Enter Router name: ");
-        String macAddress = InputValidator.getMacAddress(this.macAddressList);
-        int numOfPhysicalPort = InputValidator.getIntegerInput("Enter number of ports for Router: ");
+        String macAddress = InputValidator.getMacAddress(macAddressList);
+        String publicIP = InputValidator.getIpAddress(publicIPList, subnet);
 
-        endDevicesGraph.addVertex(new Laptop(name, macAddress, numOfPhysicalPort));
+        networkGraph.addNetworkDevice(new Laptop(name, macAddress, publicIP));
     }
 
-    public void removeEndDevice(Graph endDevicesGraph) {
-        ArrayList<Vertex> array = endDevicesGraph.toArray();
-        // Display all routers with index 
-        for (int i = 0; i < array.size(); i++) {
-            System.out.println(i + array.get(i).toString());
+    public void removeLaptop(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+        ArrayList<NetworkDevice> routerList = new ArrayList<>();
+        networkGraph.getVertices().stream().forEach(vertex -> {
+            if (vertex instanceof Laptop) {
+                routerList.add(vertex);
+            }
+        });
+
+        // Display all Laptops
+        for (int i = 0; i < routerList.size(); i++) {
+            System.out.println(i + ": " + routerList.get(i).toString());
         }
-        int choice = InputValidator.getIntegerInput("Enter End-device want to "
-                + "remove: ", 0, array.size() - 1);
-        Vertex target = array.get(choice);
-        endDevicesGraph.removeVertex(target.getDevice());
-    }
 
-    public void displayAllEndDevices(Graph endDevicesGraph) {
-        System.out.println("All routers: ");
-        endDevicesGraph.display();
-    }
-
-    public Vertex getDeviceVertex(ArrayList<Vertex> devicesArray) {
-        // Display all routers with index 
-        for (int i = 0; i < devicesArray.size(); i++) {
-            System.out.println(i + ": " + devicesArray.get(i).toString());
-        }
-        int choice = InputValidator.getIntegerInput("Device: ",
-                0, devicesArray.size() - 1);
-        return devicesArray.get(choice);
-    }
-
-    public void connectPhysicLineDevice(Graph networkGraph) {
-        ArrayList<Vertex> array = networkGraph.toArray();
-
-        Vertex target1 = this.getDeviceVertex(array);
-        array.remove(target1);
-
-        Vertex target2 = this.getDeviceVertex(array);
-
-        int portNumOfRouter1 = InputValidator.getIntegerInput("Enter port "
-                + "number of Device 1 [0 - "
-                + (target1.getDevice().getNumberOfPhysicalPort() - 1) + "]: ",
-                0, target1.getDevice().getNumberOfPhysicalPort() - 1);
-
-        int portNumOfRouter2 = InputValidator.getIntegerInput("Enter port "
-                + "number of Device 2 [0 - "
-                + (target2.getDevice().getNumberOfPhysicalPort() - 1) + "]: ",
-                0, target2.getDevice().getNumberOfPhysicalPort() - 1);
-
-        int latency = InputValidator.getIntegerInput("Enter latency(ms): ",
-                0, Integer.MAX_VALUE);
-
-        int bandwidth = InputValidator.getIntegerInput("Enter bandwidth: ",
-                0, Integer.MAX_VALUE);
-
-        // Connect physical Line on graph
-        networkGraph.addEdge(target1, target2,
-                portNumOfRouter1, portNumOfRouter2,
-                latency, bandwidth);
-
+        int targetInd = InputValidator.getIntegerInput("Enter index of laptop to remove: ", 0, routerList.size() - 1);
+        NetworkDevice target = routerList.get(targetInd);
+        networkGraph.removeNetworkDevice(target);
+        macAddressList.remove(target.getMacAddress());
+        publicIPList.remove(target.getPublicIP());
     }
 
     
-    
+
     public void loginLaptop(Graph endDevicesGraph) {
         // Transfer graph into Array
-        ArrayList<Vertex> laptopArray = endDevicesGraph.toArray();
+        ArrayList<NetworkDevice> laptopArray = endDevicesGraph.toArray();
 
         // Display list 
         for (int i = 0; i < laptopArray.size(); i++) {
@@ -103,10 +59,9 @@ public class EndDevicesManagement {
         int choice = InputValidator.getIntegerInput("Enter Laptop want to "
                 + "login: ", 0, laptopArray.size() - 1);
 
-        Laptop target = (Laptop) laptopArray.get(choice).getDevice();
+        Laptop target = (Laptop) laptopArray.get(choice);
 
         target.login();
     }
-    
-    
+
 }
