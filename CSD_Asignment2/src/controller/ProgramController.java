@@ -21,6 +21,7 @@ public class ProgramController {
     private ArrayList<String> macAddressList;
     private RouterManagement routerMan;
     private EndDevicesManagement endDeviceMan;
+    private String subnet = "192.168.0";
 
     public ProgramController() {
         this.networkGraph = new Graph();
@@ -53,7 +54,7 @@ public class ProgramController {
      *
      * @return
      */
-    public Graph getEndDevicesGraph() {
+    public Graph getLaptopGraph() {
         Graph endDevicesGraph = new Graph();
         // Loop through networkGraph and take out Vertex have device instance of Laptop
         this.networkGraph.getVertices().stream()
@@ -75,6 +76,34 @@ public class ProgramController {
             int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
             switch (choice) {
                 case 1:
+                    routerMan.addRouter(networkGraph, macAddressList, publicIPList,subnet);
+                    break;
+                case 2:
+                    routerMan.removeRouter(networkGraph, macAddressList, publicIPList);
+                    break;
+                case 3:
+                    routerMan.connectRouter(networkGraph);
+                    break;
+                case 4:
+                    routerMan.displayAllRouter(routersGraph);
+                    break;
+                default:
+                    loop = false;
+                    break;
+            }
+        }
+
+    }
+
+    public void manageEndDevices() {
+        boolean loop = true;
+        // begin loop until user exit 
+        while (loop) {
+            Graph laptopGraph = this.getLaptopGraph();
+            int max_bound = Menu.displayLaptopManagementMenu();
+            int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
+            switch (choice) {
+                case 1:
 
                     break;
                 case 2:
@@ -91,11 +120,6 @@ public class ProgramController {
                     break;
             }
         }
-
-    }
-
-    public void manageEndDevices() {
-        Graph endDevicesGraph = this.getEndDevicesGraph();
     }
 
 }

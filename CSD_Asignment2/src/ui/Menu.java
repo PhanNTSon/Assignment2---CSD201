@@ -9,7 +9,8 @@ package ui;
  * @author Phan Sơn
  */
 public class Menu {
-    public static int displayMainMen(){
+
+    public static int displayMainMen() {
         System.out.println("----------Network Simulator Program---------");
         System.out.println("1. Routers Management");
         System.out.println("2. End Devices Management");
@@ -17,14 +18,26 @@ public class Menu {
         int totalOption = 3;
         return totalOption;
     }
-    
-    public static int displayRouterManagementMenu(){
+
+    public static int displayRouterManagementMenu() {
         System.out.println("----------Router Management---------");
         System.out.println("1. Add router");
         System.out.println("2. Remove router");
         System.out.println("3. Connect router");
-        System.out.println("4. Exit");
-        int total = 4;
+        System.out.println("4. Display all Routers");
+        System.out.println("5. Exit");
+        int total = 5;
+        return total;
+    }
+
+    public static int displayLaptopManagementMenu() {
+        System.out.println("----------Laptop Management---------");
+        System.out.println("1. Add laptop");
+        System.out.println("2. Remove laptop");
+        System.out.println("3. Connect laptop");
+        System.out.println("4. Login laptop");
+        System.out.println("5. Exit");
+        int total = 5;
         return total;
     }
 }
