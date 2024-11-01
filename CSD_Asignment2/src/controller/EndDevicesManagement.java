@@ -7,6 +7,7 @@ package controller;
 import java.util.ArrayList;
 import model.Laptop;
 import model.NetworkDevice;
+import model.Router;
 import utils.Graph;
 import utils.InputValidator;
 
@@ -44,7 +45,40 @@ public class EndDevicesManagement {
         publicIPList.remove(target.getPublicIP());
     }
 
-    
+    public void connectToRouter(Graph routerGraph, Laptop laptop) {
+        // If Laptop already connect to other Router then ask if user want replace or not
+        if (!laptop.getAdjList().isEmpty()){
+            if (!InputValidator.getContinueOption("Laptop have already "
+                    + "connected. Do you want to replace ? [Y/N]: ")){
+                return;
+            }
+        }
+        // If replace then remove edge 
+        routerGraph.removeEdge(laptop, );
+        // Get new Router and connect it
+        
+        
+        
+        
+        ArrayList<Router> routerList = new ArrayList<>();
+        routerGraph.getVertices().stream().forEach(vertex -> {
+            if (vertex instanceof Router) {
+                routerList.add((Router) vertex);
+            }
+        });
+
+        // Display all Routers
+        for (int i = 0; i < routerList.size(); i++) {
+            System.out.println(i + ": " + routerList.get(i).toStringPartly());
+        }
+        int targetInd = InputValidator.getIntegerInput("Enter index of Router: ", 0, routerList.size() - 1);
+        Router router = routerList.get(targetInd);
+
+        int bandwidth = InputValidator.getIntegerInput("Enter Bandwidth: ", 0, Integer.MAX_VALUE);
+        int latency = InputValidator.getIntegerInput("Enter Latency: ", 0, Integer.MAX_VALUE);
+
+        routerGraph.addEdge(laptop, router, latency, bandwidth);
+    }
 
     public void loginLaptop(Graph endDevicesGraph) {
         // Transfer graph into Array
