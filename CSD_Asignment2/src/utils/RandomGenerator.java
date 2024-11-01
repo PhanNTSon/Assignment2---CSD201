@@ -28,5 +28,10 @@ public class RandomGenerator {
         return macAddress.toString();
     }
     
+    public static String generateRandomIpInSubnet(String subnet) {
+        Random random = new Random();
+        int hostPart = random.nextInt(254) + 1;  // Sinh số trong khoảng [1, 254]
+        return subnet + "." + hostPart;
+    }
     
 }
