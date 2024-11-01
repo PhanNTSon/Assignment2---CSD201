@@ -5,9 +5,7 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 import model.NetworkDevice;
-import model.PhysicalLine;
 import model.Router;
 import utils.Graph;
 import utils.InputValidator;
@@ -18,10 +16,10 @@ import utils.InputValidator;
  */
 public class RouterManagement {
 
-    public void addRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
-        String newName = InputValidator.getRouterName("Enter new Name: ");
+    public void addRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList, String subnet) {
+        String newName = InputValidator.getRouterName("Enter new Router name: ");
         String newMac = InputValidator.getMacAddress(macAddressList);
-        String newIp = InputValidator.getIpAddress(publicIPList);
+        String newIp = InputValidator.getIpAddress(publicIPList, subnet);
 
         Router newR = new Router(newName, newMac, newIp, networkGraph);
         networkGraph.addNetworkDevice(newR);
@@ -54,7 +52,7 @@ public class RouterManagement {
             }
         });
 
-        // Get Router 1
+        // Display all Routers
         for (int i = 0; i < routerList.size(); i++) {
             System.out.println(i + ": " + routerList.get(i).toString());
         }
@@ -63,7 +61,7 @@ public class RouterManagement {
 
         routerList.remove(router1);
 
-        // Get Router 2
+        // Display remains Router 
         for (int i = 0; i < routerList.size(); i++) {
             System.out.println(i + ": " + routerList.get(i).toString());
         }
@@ -72,9 +70,12 @@ public class RouterManagement {
 
         int bandwidth = InputValidator.getIntegerInput("Enter Bandwidth: ", 0, Integer.MAX_VALUE);
         int latency = InputValidator.getIntegerInput("Enter Latency: ", 0, Integer.MAX_VALUE);
-        
+
         networkGraph.addEdge(router1, router2, latency, bandwidth);
     }
-    
-    
+
+    public void displayAllRouter(Graph routerGraph) {
+        routerGraph.display();
+    }
+
 }

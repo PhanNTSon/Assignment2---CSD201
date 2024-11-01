@@ -114,7 +114,7 @@ public class InputValidator {
     public static String getMacAddress(ArrayList<String> macAddressList) {
         Scanner sc = new Scanner(System.in);
 
-        int choice = getIntegerInput("Manual or random? (1 for"
+        int choice = getIntegerInput("MAC Address: Manual or random? (1 for"
                 + " manual, 2 for random)",
                 1, 2);
         // If user want to manually enter
@@ -144,11 +144,11 @@ public class InputValidator {
 
     }
 
-    public static String getIpAddress(ArrayList<String> publicIPList) {
-        
+    public static String getIpAddress(ArrayList<String> publicIPList, String subnet) {
+
         Scanner sc = new Scanner(System.in);
 
-        int choice = getIntegerInput("Manual or random? (1 for"
+        int choice = getIntegerInput("IP Address: Manual or random? (1 for"
                 + " manual, 2 for random)",
                 1, 2);
         // If user want to manually enter
@@ -158,11 +158,11 @@ public class InputValidator {
 
                 System.out.print("Enter IP Address: ");
                 String input = sc.nextLine();
-                String macPattern = "^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|[1-9]?[0-9])$";
-                if (!input.matches(macPattern)) {
-                    System.out.println("Invalid IP address.");
+                String ipPattern = "^" + subnet + "\\.(\\d{1,3})$";  // Chỉ chấp nhận các địa chỉ trong subnet
+                if (!input.matches(ipPattern)) {
+                    System.out.println("Invalid IP address or out of subnet range.");
                 } else if (publicIPList.contains(input)) {
-                    System.out.println("Already exist IP Address");
+                    System.out.println("IP Address already exists.");
                 } else {
                     return input;
                 }
@@ -171,15 +171,11 @@ public class InputValidator {
             String randomIP = "";
             // Loop while random is already exist list
             do {
-                randomIP = RandomGenerator.generateMacAddress();
+                randomIP = RandomGenerator.generateRandomIpInSubnet(subnet);
             } while (publicIPList.contains(randomIP));
             return randomIP;
         }
-        
-        
+
     }
 
-    
-
-    
 }
