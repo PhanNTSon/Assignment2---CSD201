@@ -4,6 +4,9 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Phan Sơn
@@ -11,20 +14,21 @@ package model;
 public class Laptop extends NetworkDevice {
 
     private String password;
+    private List<DataPacket> receivedPackets;
 
     public Laptop(String name, String macAddress, String publicIP) {
         super(name, macAddress, publicIP);
+        this.receivedPackets = new ArrayList<>();
     }
 // ------------------------------------------------------------------
 /*
     Quang + Duong + Dat worksite inside here. Responsible for Class Laptop
-    */
+     */
     /**
-     * 
-     * @author 
-     * @param otherDevice
+     *
+     * @author @param otherDevice
      * @param line
-     * @return 
+     * @return
      */
     @Override
     public boolean addEdge(NetworkDevice otherDevice, PhysicalLine line) {
@@ -34,24 +38,36 @@ public class Laptop extends NetworkDevice {
     public boolean removeEdge(NetworkDevice otherDevice) {
     }
 
-    @Override
+    /**
+     * @author Quang tran
+     */
     public void recieveData(DataPacket packet) {
+        if (packet.getDestIP().equalsIgnoreCase(this.publicIP)) {
+            receivedPackets.add(packet);
+            System.out.println("Received data: " + packet.getContentData());
+        } else {
+            packet.setTtl(packet.getTtl() - 1);
+            this.forwardData(packet);
+        }
+
     }
 
+    /**
+     * @author Quang tran
+     */
     @Override
     public void forwardData(DataPacket packet) {
+        ((Router)adjList.keySet().toArray()[0]).recieveData(packet);
     }
-    
-    public void sendingEmails(){
+
+    public void sendingEmails() {
         // Create Data Packet
         // Forward Data Packet
     }
 
 // ------------------------------------------------------------------
+    public void login() {
 
-    public void login(){
-        
     }
-    
 
 }
