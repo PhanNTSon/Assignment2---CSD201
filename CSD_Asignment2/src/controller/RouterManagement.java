@@ -17,6 +17,7 @@ import utils.InputValidator;
 public class RouterManagement {
 
     public void addRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList, String subnet) {
+        System.out.println("----------Add router----------");
         String newName = InputValidator.getRouterName("Enter new Router name: ");
         String newMac = InputValidator.getMacAddress(macAddressList);
         String newIp = InputValidator.getIpAddress(publicIPList, subnet);
@@ -26,6 +27,7 @@ public class RouterManagement {
     }
 
     public void removeRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+        System.out.println("----------Remove router----------");
         ArrayList<NetworkDevice> routerList = new ArrayList<>();
         networkGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
@@ -45,12 +47,20 @@ public class RouterManagement {
     }
 
     public void connectRouter(Graph routerGraph) {
+        System.out.println("----------Connect router----------");
+
         ArrayList<Router> routerList = new ArrayList<>();
         routerGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
-                routerList.add((Router)vertex);
+                routerList.add((Router) vertex);
             }
         });
+        
+        // If list is not more than 2 routers then exit
+        if (routerList.size() < 2){
+            System.out.println("Need to be more than 2 Routers to connect.");
+            return;
+        }
 
         // Display all Routers
         for (int i = 0; i < routerList.size(); i++) {

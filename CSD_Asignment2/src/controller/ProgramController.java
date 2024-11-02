@@ -100,20 +100,21 @@ public class ProgramController {
         // begin loop until user exit 
         while (loop) {
             Graph laptopGraph = this.getLaptopGraph();
+            Graph routerGraph = this.getRoutersGraph();
             int max_bound = Menu.displayLaptopManagementMenu();
             int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
             switch (choice) {
                 case 1:
-
+                    endDeviceMan.addLaptop(networkGraph, macAddressList, publicIPList, subnet);;
                     break;
                 case 2:
+                    endDeviceMan.removeLaptop(laptopGraph, macAddressList, publicIPList);
                     break;
                 case 3:
+                    endDeviceMan.loginLaptop(laptopGraph, routerGraph);
                     break;
                 case 4:
-                    break;
-                case 5:
-
+                    endDeviceMan.displayAllLaptop(laptopGraph);
                     break;
                 default:
                     loop = false;

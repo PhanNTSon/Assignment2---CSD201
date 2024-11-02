@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import utils.Graph;
-import utils.InputValidator;
 
 /**
  *
@@ -199,29 +198,20 @@ public class Router extends NetworkDevice {
         return -1;
     }
 
-//    public static void main(String[] args) {
-//        Graph networkGraph = new Graph();
-//        ArrayList<String> macAddr = new ArrayList<>();
-//        ArrayList<String> ipAddr = new ArrayList<>();
-//
-//        Router r1 = new Router("R1", InputValidator.getMacAddress(macAddr), InputValidator.getIpAddress(ipAddr), networkGraph);
-//        Router r2 = new Router("R2", InputValidator.getMacAddress(macAddr), InputValidator.getIpAddress(ipAddr), networkGraph);
-//        Router r3 = new Router("R3", InputValidator.getMacAddress(macAddr), InputValidator.getIpAddress(ipAddr), networkGraph);
-//
-//        networkGraph.addEdge(r1, r2, 100, 10000);
-//        networkGraph.addEdge(r2, r3, 100, 10000);
-//
-//        networkGraph.display();
-//
-//        DataPacket pck = new DataPacket(r1.getPublicIP(), r3.getPublicIP(), 40);
-//        pck.setContentData("HEllo btich");
-//        r1.recieveData(pck);
-//    }
     @Override
     public String toString() {
         String result = "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP + "\n";
         for (Map.Entry<NetworkDevice, PhysicalLine> entry : this.adjList.entrySet()) {
-            result += "-> " + "Router: " + entry.getKey().getName()
+            String type = "";
+
+            if (entry.getKey() instanceof Router) {
+                type = "Router: ";
+            } else if (entry.getKey() instanceof Laptop) {
+                type = "Laptop: ";
+            }
+
+            result += "-> " + type
+                    + entry.getKey().getName()
                     + ", MAC Address: " + entry.getKey().getMacAddress()
                     + ", IP Address: " + entry.getKey().getPublicIP()
                     + " Latency: " + entry.getValue().getLatency() + "(ms)"
