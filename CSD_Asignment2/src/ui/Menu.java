@@ -34,10 +34,21 @@ public class Menu {
         System.out.println("----------Laptop Management---------");
         System.out.println("1. Add laptop");
         System.out.println("2. Remove laptop");
-        System.out.println("3. Connect laptop");
-        System.out.println("4. Login laptop");
+        System.out.println("3. Login laptop");
+        System.out.println("4. Display Laptops");
+
         System.out.println("5. Exit");
         int total = 5;
+        return total;
+    }
+
+    public static int displayLaptopInterfaceMenu() {
+        System.out.println("----------Laptop Interface---------");
+        System.out.println("1. Connect laptop to Router");
+        System.out.println("2. Sending email to Laptop");
+        System.out.println("3. Ping Router");
+        System.out.println("4. Exit");
+        int total = 4;
         return total;
     }
 }

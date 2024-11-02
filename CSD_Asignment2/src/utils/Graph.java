@@ -44,6 +44,7 @@ public class Graph {
                 .findFirst()
                 .orElse(null);
     }
+
     public NetworkDevice getNetworkDevice(NetworkDevice searchDevice) {
         return this.vertices.stream()
                 .filter(vertex -> (vertex.compareTo(searchDevice) == 0))
@@ -90,6 +91,15 @@ public class Graph {
             this.vertices.remove(targetDevice);
             this.vertices.forEach(vertex -> vertex.getAdjList().remove(targetDevice));
             return targetDevice;
+        }
+    }
+
+    public void removeEdge(NetworkDevice device1, NetworkDevice device2) {
+        if (device1.getAdjList().keySet().contains(device2)) {
+            device1.getAdjList().remove(device2);
+        }
+        if (device2.getAdjList().keySet().contains(device1)) {
+            device2.getAdjList().remove(device1);
         }
     }
 

@@ -97,7 +97,7 @@ public class InputValidator {
         while (true) {
             System.out.print(mess);
             String input = sc.nextLine();
-            if (!input.matches("[a-zA-Z0-9\\s]+")) {
+            if (!input.matches("[a-zA-Z0-9\\s\\.]+")) {
                 System.out.println("Error. No special characters contains.");
             } else if (input.length() > max_length) {
                 System.out.println("Error. Maximum " + max_length + " characters.");
@@ -111,11 +111,15 @@ public class InputValidator {
         return getNormalString(mess, 50);
     }
 
+    public static String getLaptopName(String mess) {
+        return getNormalString(mess, 50);
+    }
+
     public static String getMacAddress(ArrayList<String> macAddressList) {
         Scanner sc = new Scanner(System.in);
 
         int choice = getIntegerInput("MAC Address: Manual or random? (1 for"
-                + " manual, 2 for random)",
+                + " manual, 2 for random): ",
                 1, 2);
         // If user want to manually enter
         if (choice == 1) {
@@ -149,7 +153,7 @@ public class InputValidator {
         Scanner sc = new Scanner(System.in);
 
         int choice = getIntegerInput("IP Address: Manual or random? (1 for"
-                + " manual, 2 for random)",
+                + " manual, 2 for random): ",
                 1, 2);
         // If user want to manually enter
         if (choice == 1) {

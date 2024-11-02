@@ -17,6 +17,7 @@ import utils.InputValidator;
 public class RouterManagement {
 
     public void addRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList, String subnet) {
+        System.out.println("----------Add router----------");
         String newName = InputValidator.getRouterName("Enter new Router name: ");
         String newMac = InputValidator.getMacAddress(macAddressList);
         String newIp = InputValidator.getIpAddress(publicIPList, subnet);
@@ -26,6 +27,7 @@ public class RouterManagement {
     }
 
     public void removeRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+        System.out.println("----------Remove router----------");
         ArrayList<NetworkDevice> routerList = new ArrayList<>();
         networkGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
@@ -44,34 +46,42 @@ public class RouterManagement {
         publicIPList.remove(target.getPublicIP());
     }
 
-    public void connectRouter(Graph networkGraph) {
-        ArrayList<NetworkDevice> routerList = new ArrayList<>();
-        networkGraph.getVertices().stream().forEach(vertex -> {
+    public void connectRouter(Graph routerGraph) {
+        System.out.println("----------Connect router----------");
+
+        ArrayList<Router> routerList = new ArrayList<>();
+        routerGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
-                routerList.add(vertex);
+                routerList.add((Router) vertex);
             }
         });
+        
+        // If list is not more than 2 routers then exit
+        if (routerList.size() < 2){
+            System.out.println("Need to be more than 2 Routers to connect.");
+            return;
+        }
 
         // Display all Routers
         for (int i = 0; i < routerList.size(); i++) {
-            System.out.println(i + ": " + routerList.get(i).toString());
+            System.out.println(i + ": " + routerList.get(i).toStringPartly());
         }
         int targetInd = InputValidator.getIntegerInput("Enter index of Router 1: ", 0, routerList.size() - 1);
-        NetworkDevice router1 = routerList.get(targetInd);
+        Router router1 = routerList.get(targetInd);
 
         routerList.remove(router1);
 
         // Display remains Router 
         for (int i = 0; i < routerList.size(); i++) {
-            System.out.println(i + ": " + routerList.get(i).toString());
+            System.out.println(i + ": " + routerList.get(i).toStringPartly());
         }
         targetInd = InputValidator.getIntegerInput("Enter index of Router 2: ", 0, routerList.size() - 1);
-        NetworkDevice router2 = routerList.get(targetInd);
+        Router router2 = routerList.get(targetInd);
 
         int bandwidth = InputValidator.getIntegerInput("Enter Bandwidth: ", 0, Integer.MAX_VALUE);
         int latency = InputValidator.getIntegerInput("Enter Latency: ", 0, Integer.MAX_VALUE);
 
-        networkGraph.addEdge(router1, router2, latency, bandwidth);
+        routerGraph.addEdge(router1, router2, latency, bandwidth);
     }
 
     public void displayAllRouter(Graph routerGraph) {

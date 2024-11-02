@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 import utils.Graph;
-import utils.InputValidator;
 
 /**
  *
@@ -77,8 +77,15 @@ public class Router extends NetworkDevice {
     public void forwardData(DataPacket packet) {
         String nextDestIP = this.getNextHopIP(this.networkTopology, this.getPublicIP(), packet.getDestIP());
         packet.setTtl(packet.getTtl() - 1);
-        this.adjList.entrySet().stream().filter(entry -> (entry.getKey().getPublicIP().equalsIgnoreCase(nextDestIP))).findFirst().orElse(null).getKey().recieveData(packet);
-    }
+        NetworkDevice next = this.adjList.keySet().stream().filter(key->(key.getPublicIP().compareTo(nextDestIP) == 0)).findFirst().orElse(null);
+        if (next != null){
+            next.recieveData(packet);
+        } else {
+            DataPacket respond = new DataPacket(this.publicIP, packet.getSrcIP(), 50);
+            respond.setContentData("IP Address not found.");
+            this.forwardData(respond);
+        }
+    }   
 
     public String getNextHopIP(Graph networkGraph, String srcIP, String destIP) {
         ArrayList<NetworkDevice> shortestPath = this.DijkstraRef(srcIP, destIP, networkGraph);
@@ -197,30 +204,31 @@ public class Router extends NetworkDevice {
         }
         return -1;
     }
-    
-    
-
-//    public static void main(String[] args) {
-//        Graph networkGraph = new Graph();
-//        ArrayList<String> macAddr = new ArrayList<>();
-//        ArrayList<String> ipAddr = new ArrayList<>();
-//
-//        Router r1 = new Router("R1", InputValidator.getMacAddress(macAddr), InputValidator.getIpAddress(ipAddr), networkGraph);
-//        Router r2 = new Router("R2", InputValidator.getMacAddress(macAddr), InputValidator.getIpAddress(ipAddr), networkGraph);
-//        Router r3 = new Router("R3", InputValidator.getMacAddress(macAddr), InputValidator.getIpAddress(ipAddr), networkGraph);
-//
-//        networkGraph.addEdge(r1, r2, 100, 10000);
-//        networkGraph.addEdge(r2, r3, 100, 10000);
-//
-//        networkGraph.display();
-//
-//        DataPacket pck = new DataPacket(r1.getPublicIP(), r3.getPublicIP(), 40);
-//        pck.setContentData("HEllo btich");
-//        r1.recieveData(pck);
-//    }
 
     @Override
     public String toString() {
-        return "Router{" + '}';
+        String result = "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP + "\n";
+        for (Map.Entry<NetworkDevice, PhysicalLine> entry : this.adjList.entrySet()) {
+            String type = "";
+
+            if (entry.getKey() instanceof Router) {
+                type = "Router: ";
+            } else if (entry.getKey() instanceof Laptop) {
+                type = "Laptop: ";
+            }
+
+            result += "-> " + type
+                    + entry.getKey().getName()
+                    + ", MAC Address: " + entry.getKey().getMacAddress()
+                    + ", IP Address: " + entry.getKey().getPublicIP()
+                    + " Latency: " + entry.getValue().getLatency() + "(ms)"
+                    + "Bandwidth: " + entry.getValue().getBandwith()
+                    + "\n";
+        }
+        return result;
+    }
+
+    public String toStringPartly() {
+        return "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP;
     }
 }
