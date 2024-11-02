@@ -47,8 +47,9 @@ public class Menu {
         System.out.println("1. Connect laptop to Router");
         System.out.println("2. Sending email to Laptop");
         System.out.println("3. Ping Router");
-        System.out.println("4. Exit");
-        int total = 4;
+        System.out.println("4. Config password");
+        System.out.println("5. Exit");
+        int total = 5;
         return total;
     }
 }

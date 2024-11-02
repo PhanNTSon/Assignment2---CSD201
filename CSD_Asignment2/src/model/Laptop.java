@@ -259,4 +259,15 @@ public class Laptop extends NetworkDevice {
     public String toStringPartly() {
         return "Laptop: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP;
     }
+
+    @Override
+    public int compareTo(NetworkDevice o) {
+        if (o instanceof Laptop) {
+            if (o.getMacAddress().equalsIgnoreCase(this.macAddress)) {
+                return 0;
+            }
+        }
+        return -1;
+    }
+
 }
