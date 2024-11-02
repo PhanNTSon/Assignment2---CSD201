@@ -4,6 +4,7 @@
  */
 package controller;
 
+import java.util.ArrayList;
 import utils.Graph;
 import model.*;
 import ui.Menu;
@@ -16,11 +17,16 @@ import utils.InputValidator;
 public class ProgramController {
 
     private Graph networkGraph;
+    private ArrayList<String> publicIPList;
+    private ArrayList<String> macAddressList;
     private RouterManagement routerMan;
     private EndDevicesManagement endDeviceMan;
+    private String subnet = "192.168.0";
 
     public ProgramController() {
         this.networkGraph = new Graph();
+        this.publicIPList = new ArrayList<>();
+        this.macAddressList = new ArrayList<>();
         this.routerMan = new RouterManagement();
         this.endDeviceMan = new EndDevicesManagement();
     }
@@ -34,10 +40,10 @@ public class ProgramController {
         Graph routersGraph = new Graph();
         // Loop through networkGraph and take out Vertex have device instance of Router
         this.networkGraph.getVertices().stream()
-                .forEach(vertex -> {
-                    // If vertex is instance of Router then add to Temp graph
-                    if (vertex.getDevice() instanceof Router) {
-                        routersGraph.addVertex(vertex);
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Router) {
+                        routersGraph.addNetworkDevice(device);
                     }
                 });
         return routersGraph;
@@ -48,14 +54,14 @@ public class ProgramController {
      *
      * @return
      */
-    public Graph getEndDevicesGraph() {
+    public Graph getLaptopGraph() {
         Graph endDevicesGraph = new Graph();
         // Loop through networkGraph and take out Vertex have device instance of Laptop
         this.networkGraph.getVertices().stream()
-                .forEach(vertex -> {
-                    // If vertex is instance of Router then add to Temp graph
-                    if (vertex.getDevice() instanceof Laptop) {
-                        endDevicesGraph.addVertex(vertex);
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Laptop) {
+                        endDevicesGraph.addNetworkDevice(device);
                     }
                 });
         return endDevicesGraph;
@@ -70,6 +76,35 @@ public class ProgramController {
             int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
             switch (choice) {
                 case 1:
+                    routerMan.addRouter(networkGraph, macAddressList, publicIPList,subnet);
+                    break;
+                case 2:
+                    routerMan.removeRouter(networkGraph, macAddressList, publicIPList);
+                    break;
+                case 3:
+                    routerMan.connectRouter(networkGraph);
+                    break;
+                case 4:
+                    routerMan.displayAllRouter(routersGraph);
+                    break;
+                default:
+                    loop = false;
+                    break;
+            }
+        }
+
+    }
+
+    public void manageEndDevices() {
+        boolean loop = true;
+        // begin loop until user exit 
+        while (loop) {
+            Graph laptopGraph = this.getLaptopGraph();
+            int max_bound = Menu.displayLaptopManagementMenu();
+            int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
+            switch (choice) {
+                case 1:
+
                     break;
                 case 2:
                     break;
@@ -85,10 +120,6 @@ public class ProgramController {
                     break;
             }
         }
-
     }
 
-    public void manageEndDevices() {
-        Graph endDevicesGraph = this.getEndDevicesGraph();
-    }
 }

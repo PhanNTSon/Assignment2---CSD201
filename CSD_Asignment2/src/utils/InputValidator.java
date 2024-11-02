@@ -114,7 +114,7 @@ public class InputValidator {
     public static String getMacAddress(ArrayList<String> macAddressList) {
         Scanner sc = new Scanner(System.in);
 
-        int choice = getIntegerInput("Manual or random? (1 for"
+        int choice = getIntegerInput("MAC Address: Manual or random? (1 for"
                 + " manual, 2 for random)",
                 1, 2);
         // If user want to manually enter
@@ -144,67 +144,38 @@ public class InputValidator {
 
     }
 
-    public static String getIpAddress() {
+    public static String getIpAddress(ArrayList<String> publicIPList, String subnet) {
+
         Scanner sc = new Scanner(System.in);
-        // Loop until input valid 
-        while (true) {
-            System.out.print("Enter IP Address: ");
-            String input = sc.nextLine();
-            String ipPattern = "^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|[1-9]?[0-9])$";
-            if (!input.matches(ipPattern)) {
-                System.out.println("Invalid IP address.");
-            } else {
-                return input;
-            }
-        }
-    }
 
-    public static String getSubnetMask() {
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.print("Enter Subnet mask: ");
-            String input = sc.nextLine();
-            if (isValidOcteOfSubnetMask(input)) {
-                return input;
-            } else {
-                System.out.println("Invalid Subnet mask.");
-            }
-        }
-    }
+        int choice = getIntegerInput("IP Address: Manual or random? (1 for"
+                + " manual, 2 for random)",
+                1, 2);
+        // If user want to manually enter
+        if (choice == 1) {
+            // Loop until input valid 
+            while (true) {
 
-    public static boolean isValidOcteOfSubnetMask(String subnetMask) {
-        String[] octetsParts = subnetMask.split("\\.");
-        // If length is not 4 then return false
-        if (octetsParts.length != 4) {
-            return false;
-        }
-
-        int[] validValues = {0, 128, 192, 224, 240, 248, 252, 254, 255};
-
-        // Loop through each octet and check if, return false if one of them invalid
-        for (String octet : octetsParts) {
-
-            try {
-                int value = Integer.parseInt(octet);
-                boolean isValidOctet = false;
-
-                // Check if octet value is valid
-                for (int valid : validValues) {
-                    // If found a valid value, break loop
-                    if (value == valid) {
-                        isValidOctet = true;
-                        break;
-                    }
+                System.out.print("Enter IP Address: ");
+                String input = sc.nextLine();
+                String ipPattern = "^" + subnet + "\\.(\\d{1,3})$";  // Chỉ chấp nhận các địa chỉ trong subnet
+                if (!input.matches(ipPattern)) {
+                    System.out.println("Invalid IP address or out of subnet range.");
+                } else if (publicIPList.contains(input)) {
+                    System.out.println("IP Address already exists.");
+                } else {
+                    return input;
                 }
-
-                // If octet value is not valid then return false
-                if (!isValidOctet) {
-                    return false;
-                }
-            } catch (Exception e) { // Case can't parse Octet into number, return false
-                return false;
             }
+        } else {    // User want to random
+            String randomIP = "";
+            // Loop while random is already exist list
+            do {
+                randomIP = RandomGenerator.generateRandomIpInSubnet(subnet);
+            } while (publicIPList.contains(randomIP));
+            return randomIP;
         }
-        return true;
+
     }
+
 }
