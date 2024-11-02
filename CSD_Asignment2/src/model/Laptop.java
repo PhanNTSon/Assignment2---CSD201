@@ -135,7 +135,7 @@ public class Laptop extends NetworkDevice {
 
         String destIP = target.getPublicIP();
 
-        String msg = "Test";
+        String msg = "Enter content here: ";
         String content = InputValidator.getNormalString(msg, 100);
 
         DataPacket datapacket = new DataPacket(srcIP, destIP, 30);
