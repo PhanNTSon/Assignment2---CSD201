@@ -61,6 +61,7 @@ public class Router extends NetworkDevice {
             DataPacket respond = new DataPacket(this.publicIP, packet.getSrcIP(), 50);
             respond.setContentData("Data time out.");
             this.forwardData(respond);
+            return;
         }
 
         if (packet.getDestIP().equalsIgnoreCase(this.publicIP)) {
@@ -77,19 +78,30 @@ public class Router extends NetworkDevice {
     public void forwardData(DataPacket packet) {
         String nextDestIP = this.getNextHopIP(this.networkTopology, this.getPublicIP(), packet.getDestIP());
         packet.setTtl(packet.getTtl() - 1);
-        NetworkDevice next = this.adjList.keySet().stream().filter(key->(key.getPublicIP().compareTo(nextDestIP) == 0)).findFirst().orElse(null);
-        if (next != null){
-            next.recieveData(packet);
-        } else {
+
+        // If nextDestIP equal to null means destIP is not exist then forward back to srcIP
+        if (nextDestIP == null) {
             DataPacket respond = new DataPacket(this.publicIP, packet.getSrcIP(), 50);
             respond.setContentData("IP Address not found.");
             this.forwardData(respond);
+            return;
         }
-    }   
+
+        NetworkDevice next = this.adjList.keySet().stream().filter(key -> (key.getPublicIP().compareTo(nextDestIP) == 0)).findFirst().orElse(null);
+        next.recieveData(packet);
+
+    }
 
     public String getNextHopIP(Graph networkGraph, String srcIP, String destIP) {
         ArrayList<NetworkDevice> shortestPath = this.DijkstraRef(srcIP, destIP, networkGraph);
-        return shortestPath.get(1).getPublicIP();
+        // If shortest path is null means destIP doesn't exist then return null
+        if (shortestPath == null) {
+            return null;
+        }
+        if (shortestPath.size() > 1) {
+            return shortestPath.get(1).getPublicIP();
+        }
+        return shortestPath.get(0).getPublicIP();
     }
 
     /**
@@ -109,7 +121,7 @@ public class Router extends NetworkDevice {
         networkGraph.getVertices().stream()
                 .forEach(device -> {
                     if (device.getPublicIP().equalsIgnoreCase(srcIP)) {
-                        distance.put(device, Double.parseDouble("0"));
+                        distance.put(device, 0.0);
                     } else {
                         distance.put(device, Double.MAX_VALUE);
                     }
@@ -164,6 +176,7 @@ public class Router extends NetworkDevice {
 
             }
         }
+
         // Take right path 
         ArrayList<NetworkDevice> path = this.getPath(previous, networkGraph.getNetworkDeviceByIP(srcIP), networkGraph.getNetworkDeviceByIP(destIP));
         return path;
@@ -180,6 +193,10 @@ public class Router extends NetworkDevice {
      * @return
      */
     public ArrayList<NetworkDevice> getPath(HashMap<NetworkDevice, NetworkDevice> previous, NetworkDevice srcDevice, NetworkDevice destDevice) {
+
+        if (destDevice == null || srcDevice == null) {
+            return null;
+        }
 
         ArrayList<NetworkDevice> path = new ArrayList<>();
 
