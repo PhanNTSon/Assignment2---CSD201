@@ -102,8 +102,10 @@ public class Laptop extends NetworkDevice {
         // Forward Data Packet
     }
 
-    public void pingRouter(Graph routerGraph) {
-
+    public void pingRouter() {
+        String ip = InputValidator.getNormalString("Ping IP: ", 13);
+        DataPacket pingPacket = new DataPacket(this.publicIP, ip, 30);
+        this.forwardData(pingPacket);
     }
 
 // ------------------------------------------------------------------
@@ -134,7 +136,7 @@ public class Laptop extends NetworkDevice {
                     this.sendingEmails();
                     break;
                 case 3:
-                    this.pingRouter(routerGraph);
+                    this.pingRouter();
                     break;
                 case 4:
                     this.configPassword();

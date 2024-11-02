@@ -77,8 +77,15 @@ public class Router extends NetworkDevice {
     public void forwardData(DataPacket packet) {
         String nextDestIP = this.getNextHopIP(this.networkTopology, this.getPublicIP(), packet.getDestIP());
         packet.setTtl(packet.getTtl() - 1);
-        this.adjList.entrySet().stream().filter(entry -> (entry.getKey().getPublicIP().equalsIgnoreCase(nextDestIP))).findFirst().orElse(null).getKey().recieveData(packet);
-    }
+        NetworkDevice next = this.adjList.keySet().stream().filter(key->(key.getPublicIP().compareTo(nextDestIP) == 0)).findFirst().orElse(null);
+        if (next != null){
+            next.recieveData(packet);
+        } else {
+            DataPacket respond = new DataPacket(this.publicIP, packet.getSrcIP(), 50);
+            respond.setContentData("IP Address not found.");
+            this.forwardData(respond);
+        }
+    }   
 
     public String getNextHopIP(Graph networkGraph, String srcIP, String destIP) {
         ArrayList<NetworkDevice> shortestPath = this.DijkstraRef(srcIP, destIP, networkGraph);

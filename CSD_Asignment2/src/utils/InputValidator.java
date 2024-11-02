@@ -97,7 +97,7 @@ public class InputValidator {
         while (true) {
             System.out.print(mess);
             String input = sc.nextLine();
-            if (!input.matches("[a-zA-Z0-9\\s]+")) {
+            if (!input.matches("[a-zA-Z0-9\\s\\.]+")) {
                 System.out.println("Error. No special characters contains.");
             } else if (input.length() > max_length) {
                 System.out.println("Error. Maximum " + max_length + " characters.");
