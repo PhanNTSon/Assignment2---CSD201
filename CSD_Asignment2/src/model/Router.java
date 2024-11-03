@@ -66,7 +66,8 @@ public class Router extends NetworkDevice {
 
         if (packet.getDestIP().equalsIgnoreCase(this.publicIP)) {
             DataPacket respond = new DataPacket(this.publicIP, packet.getSrcIP(), 50);
-            respond.setContentData("Router: " + this.publicIP + " Hello");
+            respond.setContentData("Ping successfully. Router " + this.name + ""
+                    + ", IP: " + this.publicIP);
             this.forwardData(respond);
         } else {
             this.forwardData(packet);
@@ -224,7 +225,7 @@ public class Router extends NetworkDevice {
 
     @Override
     public String toString() {
-        String result = "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP + "\n";
+        String result = "Router: " + this.name + ", MAC: " + this.macAddress + ", IP: " + this.publicIP + "\n";
         for (Map.Entry<NetworkDevice, PhysicalLine> entry : this.adjList.entrySet()) {
             String type = "";
 
@@ -236,16 +237,16 @@ public class Router extends NetworkDevice {
 
             result += "-> " + type
                     + entry.getKey().getName()
-                    + ", MAC Address: " + entry.getKey().getMacAddress()
-                    + ", IP Address: " + entry.getKey().getPublicIP()
-                    + " Latency: " + entry.getValue().getLatency() + "(ms)"
-                    + "Bandwidth: " + entry.getValue().getBandwith()
-                    + "\n";
+                    + ", MAC: " + entry.getKey().getMacAddress()
+                    + ", IP: " + entry.getKey().getPublicIP()
+                    + " [Latency: " + entry.getValue().getLatency() + "(ms)"
+                    + ", Bandwidth: " + entry.getValue().getBandwith()
+                    + "]\n";
         }
         return result;
     }
 
     public String toStringPartly() {
-        return "Router: " + this.name + ", MAC Address: " + this.macAddress + ", IP Address: " + this.publicIP;
+        return "Router: " + this.name + ", MAC: " + this.macAddress + ", IP: " + this.publicIP + "\n";
     }
 }

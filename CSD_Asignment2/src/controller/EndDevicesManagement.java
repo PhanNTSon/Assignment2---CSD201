@@ -28,6 +28,11 @@ public class EndDevicesManagement {
     public void removeLaptop(Graph laptopGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
         System.out.println("----------Remove laptop----------");
 
+        if (laptopGraph.isEmpty()) {
+            System.out.println("No Laptop to remove");
+            return;
+        }
+        
         ArrayList<NetworkDevice> laptopList = laptopGraph.toArray();
 
         // Display all Laptops

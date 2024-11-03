@@ -3,21 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/D:/Study/2024/Fall%2024/CSD201/Assignment2/Assignment2---CSD201/CSD_Asignment2/src/model/Laptop.java</file>
-            <file>file:/D:/Study/2024/Fall%2024/CSD201/Assignment2/Assignment2---CSD201/CSD_Asignment2/src/model/DataPacket.java</file>
-            <file>file:/D:/Study/2024/Fall%2024/CSD201/Assignment2/Assignment2---CSD201/CSD_Asignment2/src/model/PhysicalLine.java</file>
-            <file>file:/D:/Study/2024/Fall%2024/CSD201/Assignment2/Assignment2---CSD201/CSD_Asignment2/src/model/Router.java</file>
-            <file>file:/D:/Study/2024/Fall%2024/CSD201/Assignment2/Assignment2---CSD201/CSD_Asignment2/src/controller/EndDevicesManagement.java</file>
-            <file>file:/D:/Study/2024/Fall%2024/CSD201/Assignment2/Assignment2---CSD201/CSD_Asignment2/src/model/NetworkDevice.java</file>
-=======
-            <file>file:/E:/Study/Ki_3/CSD201/Assignment2/CSD_Asignment2/src/utils/InputValidator.java</file>
             <file>file:/E:/Study/Ki_3/CSD201/Assignment2/CSD_Asignment2/src/controller/RouterManagement.java</file>
-            <file>file:/E:/Study/Ki_3/CSD201/Assignment2/CSD_Asignment2/src/model/Router.java</file>
-            <file>file:/E:/Study/Ki_3/CSD201/Assignment2/CSD_Asignment2/src/model/Laptop.java</file>
             <file>file:/E:/Study/Ki_3/CSD201/Assignment2/CSD_Asignment2/src/controller/EndDevicesManagement.java</file>
             <file>file:/E:/Study/Ki_3/CSD201/Assignment2/CSD_Asignment2/src/controller/ProgramController.java</file>
->>>>>>> a0c644202fc04ba29784ed105502d3c88bc193ce
         </group>
     </open-files>
 </project-private>

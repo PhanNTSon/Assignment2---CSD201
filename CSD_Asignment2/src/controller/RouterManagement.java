@@ -9,6 +9,7 @@ import model.NetworkDevice;
 import model.Router;
 import utils.Graph;
 import utils.InputValidator;
+import utils.RandomGenerator;
 
 /**
  *
@@ -26,10 +27,15 @@ public class RouterManagement {
         networkGraph.addNetworkDevice(newR);
     }
 
-    public void removeRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+    public void removeRouter(Graph routerGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
         System.out.println("----------Remove router----------");
+        if (routerGraph.isEmpty()) {
+            System.out.println("No routers to remove");
+            return;
+        }
+
         ArrayList<NetworkDevice> routerList = new ArrayList<>();
-        networkGraph.getVertices().stream().forEach(vertex -> {
+        routerGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
                 routerList.add(vertex);
             }
@@ -41,7 +47,7 @@ public class RouterManagement {
 
         int targetInd = InputValidator.getIntegerInput("Enter index of Router to remove: ", 0, routerList.size() - 1);
         NetworkDevice target = routerList.get(targetInd);
-        networkGraph.removeNetworkDevice(target);
+        routerGraph.removeNetworkDevice(target);
         macAddressList.remove(target.getMacAddress());
         publicIPList.remove(target.getPublicIP());
     }
@@ -55,9 +61,9 @@ public class RouterManagement {
                 routerList.add((Router) vertex);
             }
         });
-        
+
         // If list is not more than 2 routers then exit
-        if (routerList.size() < 2){
+        if (routerList.size() < 2) {
             System.out.println("Need to be more than 2 Routers to connect.");
             return;
         }
@@ -78,9 +84,16 @@ public class RouterManagement {
         targetInd = InputValidator.getIntegerInput("Enter index of Router 2: ", 0, routerList.size() - 1);
         Router router2 = routerList.get(targetInd);
 
-        int bandwidth = InputValidator.getIntegerInput("Enter Bandwidth: ", 0, Integer.MAX_VALUE);
-        int latency = InputValidator.getIntegerInput("Enter Latency: ", 0, Integer.MAX_VALUE);
+        int bandwidth = InputValidator.getIntegerInput("Enter Bandwidth (Type 0 for random): ", 0, Integer.MAX_VALUE);
+        int latency = InputValidator.getIntegerInput("Enter Latency (Type 0 for random): ", 0, Integer.MAX_VALUE);
 
+        if (bandwidth == 0) {
+            bandwidth = RandomGenerator.generateRandomPositiveInteger();
+        }
+        if (latency == 0) {
+            latency = RandomGenerator.generateRandomPositiveInteger();
+        }
+        
         routerGraph.addEdge(router1, router2, latency, bandwidth);
     }
 

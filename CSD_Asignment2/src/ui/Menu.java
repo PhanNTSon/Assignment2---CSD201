@@ -42,14 +42,22 @@ public class Menu {
         return total;
     }
 
-    public static int displayLaptopInterfaceMenu() {
-        System.out.println("----------Laptop Interface---------");
+    public static int displayLaptopInterfaceMenu(String Lname) {
+        System.out.println("----------WINDOW XP " + Lname + "---------");
         System.out.println("1. Connect laptop to Router");
-        System.out.println("2. Sending email to Laptop");
+        System.out.println("2. Gmail");
         System.out.println("3. Ping Router");
         System.out.println("4. Config password");
         System.out.println("5. Exit");
         int total = 5;
+        return total;
+    }
+
+    public static int displayGmailInterfaceMenu() {
+        System.out.println("1. Send Emails");
+        System.out.println("2. Read Emails");
+        System.out.println("3. Exit");
+        int total = 3;
         return total;
     }
 }

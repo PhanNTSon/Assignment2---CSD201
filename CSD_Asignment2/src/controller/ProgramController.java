@@ -79,7 +79,7 @@ public class ProgramController {
                     routerMan.addRouter(networkGraph, macAddressList, publicIPList,subnet);
                     break;
                 case 2:
-                    routerMan.removeRouter(networkGraph, macAddressList, publicIPList);
+                    routerMan.removeRouter(routersGraph, macAddressList, publicIPList);
                     break;
                 case 3:
                     routerMan.connectRouter(routersGraph);

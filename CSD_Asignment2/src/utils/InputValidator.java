@@ -25,7 +25,9 @@ public class InputValidator {
                             + "RANGE [" + MIN_BOUND + " - " + MAX_BOUND + "]");
                 }
                 return input;
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            } catch (NumberFormatException e) {
+                System.out.println("ERROR.INPUT MUST BE DIGIT.");
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -58,7 +60,7 @@ public class InputValidator {
                 }
                 return output;
             } catch (NumberFormatException e) {
-                System.out.println("WRONG FORMAT. ONLY ENTER NUMBERS.");
+                System.out.println("ERROR. INPUT MUST BE DIGIT");
             } catch (IndexOutOfBoundsException e) {
                 System.out.println(e.getMessage());
             }
