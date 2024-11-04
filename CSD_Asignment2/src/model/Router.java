@@ -70,6 +70,8 @@ public class Router extends NetworkDevice {
                     + ", IP: " + this.publicIP);
             this.forwardData(respond);
         } else {
+            System.out.println("Hop on: " + this.name + ", " + this.publicIP);
+
             this.forwardData(packet);
         }
 

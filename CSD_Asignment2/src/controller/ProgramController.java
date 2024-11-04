@@ -31,47 +31,14 @@ public class ProgramController {
         this.endDeviceMan = new EndDevicesManagement();
     }
 
-    /**
-     * Return a Graph that contains only Router.
-     *
-     * @return
-     */
-    public Graph getRoutersGraph() {
-        Graph routersGraph = new Graph();
-        // Loop through networkGraph and take out Vertex have device instance of Router
-        this.networkGraph.getVertices().stream()
-                .forEach(device -> {
-                    // If device is instance of Router then add to Temp graph
-                    if (device instanceof Router) {
-                        routersGraph.addNetworkDevice(device);
-                    }
-                });
-        return routersGraph;
-    }
+    
 
-    /**
-     * Return a Graph that contains only End Devices.
-     *
-     * @return
-     */
-    public Graph getLaptopGraph() {
-        Graph endDevicesGraph = new Graph();
-        // Loop through networkGraph and take out Vertex have device instance of Laptop
-        this.networkGraph.getVertices().stream()
-                .forEach(device -> {
-                    // If device is instance of Router then add to Temp graph
-                    if (device instanceof Laptop) {
-                        endDevicesGraph.addNetworkDevice(device);
-                    }
-                });
-        return endDevicesGraph;
-    }
+    
 
     public void manageRouter() {
         boolean loop = true;
         // begin loop until user exit 
         while (loop) {
-            Graph routersGraph = this.getRoutersGraph();
             int max_bound = Menu.displayRouterManagementMenu();
             int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
             switch (choice) {
@@ -79,13 +46,13 @@ public class ProgramController {
                     routerMan.addRouter(networkGraph, macAddressList, publicIPList,subnet);
                     break;
                 case 2:
-                    routerMan.removeRouter(routersGraph, macAddressList, publicIPList);
+                    routerMan.removeRouter(networkGraph, macAddressList, publicIPList);
                     break;
                 case 3:
-                    routerMan.connectRouter(routersGraph);
+                    routerMan.connectRouter(networkGraph);
                     break;
                 case 4:
-                    routerMan.displayAllRouter(routersGraph);
+                    routerMan.displayAllRouter(networkGraph);
                     break;
                 default:
                     loop = false;
@@ -99,8 +66,6 @@ public class ProgramController {
         boolean loop = true;
         // begin loop until user exit 
         while (loop) {
-            Graph laptopGraph = this.getLaptopGraph();
-            Graph routerGraph = this.getRoutersGraph();
             int max_bound = Menu.displayLaptopManagementMenu();
             int choice = InputValidator.getIntegerInput("Enter chocie: ", 1, max_bound);
             switch (choice) {
@@ -108,13 +73,13 @@ public class ProgramController {
                     endDeviceMan.addLaptop(networkGraph, macAddressList, publicIPList, subnet);;
                     break;
                 case 2:
-                    endDeviceMan.removeLaptop(laptopGraph, macAddressList, publicIPList);
+                    endDeviceMan.removeLaptop(networkGraph, macAddressList, publicIPList);
                     break;
                 case 3:
-                    endDeviceMan.loginLaptop(laptopGraph, routerGraph);
+                    endDeviceMan.loginLaptop(networkGraph);
                     break;
                 case 4:
-                    endDeviceMan.displayAllLaptop(laptopGraph);
+                    endDeviceMan.displayAllLaptop(networkGraph);
                     break;
                 default:
                     loop = false;

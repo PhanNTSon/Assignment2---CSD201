@@ -38,7 +38,7 @@ public class RandomGenerator {
         Random rand = new Random();
         int r;
         do {
-            r = rand.nextInt();
+            r = rand.nextInt(100000);
         } while (r <= 0);
         return r;
     }

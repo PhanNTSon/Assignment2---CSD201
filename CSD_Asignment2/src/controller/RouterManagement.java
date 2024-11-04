@@ -17,6 +17,23 @@ import utils.RandomGenerator;
  */
 public class RouterManagement {
 
+    /**
+     * Return a Graph that contains only Router.
+     *
+     * @return
+     */
+    public Graph getRoutersGraph(Graph networkGraph) {
+        Graph rGraph = new Graph();
+        networkGraph.getVertices().stream()
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Router) {
+                        rGraph.addNetworkDevice(device);
+                    }
+                });
+        return rGraph;
+    }
+    
     public void addRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList, String subnet) {
         System.out.println("----------Add router----------");
         String newName = InputValidator.getRouterName("Enter new Router name: ");
@@ -27,15 +44,18 @@ public class RouterManagement {
         networkGraph.addNetworkDevice(newR);
     }
 
-    public void removeRouter(Graph routerGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+    public void removeRouter(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
         System.out.println("----------Remove router----------");
-        if (routerGraph.isEmpty()) {
+        
+        
+        
+        if (networkGraph.isEmpty()) {
             System.out.println("No routers to remove");
             return;
         }
 
         ArrayList<NetworkDevice> routerList = new ArrayList<>();
-        routerGraph.getVertices().stream().forEach(vertex -> {
+        networkGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
                 routerList.add(vertex);
             }
@@ -47,16 +67,18 @@ public class RouterManagement {
 
         int targetInd = InputValidator.getIntegerInput("Enter index of Router to remove: ", 0, routerList.size() - 1);
         NetworkDevice target = routerList.get(targetInd);
-        routerGraph.removeNetworkDevice(target);
+        
+        networkGraph.removeNetworkDevice(target);
+        
         macAddressList.remove(target.getMacAddress());
         publicIPList.remove(target.getPublicIP());
     }
 
-    public void connectRouter(Graph routerGraph) {
+    public void connectRouter(Graph networkGraph) {
         System.out.println("----------Connect router----------");
 
         ArrayList<Router> routerList = new ArrayList<>();
-        routerGraph.getVertices().stream().forEach(vertex -> {
+        networkGraph.getVertices().stream().forEach(vertex -> {
             if (vertex instanceof Router) {
                 routerList.add((Router) vertex);
             }
@@ -94,10 +116,11 @@ public class RouterManagement {
             latency = RandomGenerator.generateRandomPositiveInteger();
         }
         
-        routerGraph.addEdge(router1, router2, latency, bandwidth);
+        networkGraph.addEdge(router1, router2, latency, bandwidth);
     }
 
-    public void displayAllRouter(Graph routerGraph) {
+    public void displayAllRouter(Graph networkGraph) {
+        Graph routerGraph = this.getRoutersGraph(networkGraph);
         routerGraph.display();
     }
 

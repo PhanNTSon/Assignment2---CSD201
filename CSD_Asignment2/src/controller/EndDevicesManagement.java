@@ -7,6 +7,7 @@ package controller;
 import java.util.ArrayList;
 import model.Laptop;
 import model.NetworkDevice;
+import model.Router;
 import utils.Graph;
 import utils.InputValidator;
 
@@ -16,6 +17,41 @@ import utils.InputValidator;
  */
 public class EndDevicesManagement {
 
+    /**
+     * Return a Graph that contains only End Devices.
+     *
+     * @return
+     */
+    public Graph getLaptopGraph(Graph networkGraph) {
+        Graph endDevicesGraph = new Graph();
+        // Loop through networkGraph and take out Vertex have device instance of Laptop
+        networkGraph.getVertices().stream()
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Laptop) {
+                        endDevicesGraph.addNetworkDevice(device);
+                    }
+                });
+        return endDevicesGraph;
+    }
+    
+    /**
+     * Return a Graph that contains only Router.
+     *
+     * @return
+     */
+    public Graph getRoutersGraph(Graph networkGraph) {
+        Graph rGraph = new Graph();
+        networkGraph.getVertices().stream()
+                .forEach(device -> {
+                    // If device is instance of Router then add to Temp graph
+                    if (device instanceof Router) {
+                        rGraph.addNetworkDevice(device);
+                    }
+                });
+        return rGraph;
+    }
+    
     public void addLaptop(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList, String subnet) {
         System.out.println("----------Add laptop----------");
         String name = InputValidator.getLaptopName("Enter Laptop name: ");
@@ -25,15 +61,15 @@ public class EndDevicesManagement {
         networkGraph.addNetworkDevice(new Laptop(name, macAddress, publicIP));
     }
 
-    public void removeLaptop(Graph laptopGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
+    public void removeLaptop(Graph networkGraph, ArrayList<String> macAddressList, ArrayList<String> publicIPList) {
         System.out.println("----------Remove laptop----------");
 
-        if (laptopGraph.isEmpty()) {
+        if (networkGraph.isEmpty()) {
             System.out.println("No Laptop to remove");
             return;
         }
         
-        ArrayList<NetworkDevice> laptopList = laptopGraph.toArray();
+        ArrayList<NetworkDevice> laptopList = networkGraph.toArray();
 
         // Display all Laptops
         for (int i = 0; i < laptopList.size(); i++) {
@@ -42,25 +78,31 @@ public class EndDevicesManagement {
 
         int targetInd = InputValidator.getIntegerInput("Enter index of laptop to remove: ", 0, laptopList.size() - 1);
         NetworkDevice target = laptopList.get(targetInd);
-        laptopGraph.removeNetworkDevice(target);
+        
+        networkGraph.removeNetworkDevice(target);
+        
         macAddressList.remove(target.getMacAddress());
         publicIPList.remove(target.getPublicIP());
     }
 
-    public void displayAllLaptop(Graph endDevicesGraph) {
+    public void displayAllLaptop(Graph networkGraph) {
+        Graph endDevicesGraph = this.getLaptopGraph(networkGraph);
         endDevicesGraph.display();
     }
 
-    public void loginLaptop(Graph endDevicesGraph, Graph routerGraph) {
+    public void loginLaptop(Graph networkGraph) {
         System.out.println("----------Login laptop----------");
 
-        if (endDevicesGraph.isEmpty()) {
+        Graph laptopGraph = this.getLaptopGraph(networkGraph);
+        Graph routerGraph = this.getRoutersGraph(networkGraph);
+        
+        if (laptopGraph.isEmpty()) {
             System.out.println("No Laptop available");
             return;
         }
 
         // Transfer graph into Array
-        ArrayList<NetworkDevice> laptopArray = endDevicesGraph.toArray();
+        ArrayList<NetworkDevice> laptopArray = laptopGraph.toArray();
 
         // Display list 
         for (int i = 0; i < laptopArray.size(); i++) {
@@ -73,7 +115,7 @@ public class EndDevicesManagement {
 
         Laptop target = (Laptop) laptopArray.get(choice);
 
-        target.login(routerGraph,endDevicesGraph);
+        target.login(routerGraph,laptopGraph);
     }
 
 }
