@@ -14,6 +14,8 @@ import utils.InputValidator;
 public class Main {
     public static void main(String[] args) {
         ProgramController programController = new ProgramController();
+        programController.getEntitesFromDatabase();
+        programController.getEdgesFromDatabase();
         // Loop until user exit
         while (true) {
             int max_bound = Menu.displayMainMen();
@@ -26,6 +28,8 @@ public class Main {
                     programController.manageEndDevices();
                     break;
                 case 3:
+                    programController.saveDevices();
+                    programController.saveEdges();
                     System.exit(0);
             }
         }

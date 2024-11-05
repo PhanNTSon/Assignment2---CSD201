@@ -44,6 +44,12 @@ public class Graph {
                 .findFirst()
                 .orElse(null);
     }
+    public NetworkDevice getNetworkDeviceByMAC(String searchMAC) {
+        return this.vertices.stream()
+                .filter(vertex -> (vertex.getMacAddress().equalsIgnoreCase(searchMAC)))
+                .findFirst()
+                .orElse(null);
+    }
 
     public NetworkDevice getNetworkDevice(NetworkDevice searchDevice) {
         return this.vertices.stream()

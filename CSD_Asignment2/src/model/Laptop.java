@@ -270,6 +270,7 @@ public class Laptop extends NetworkDevice {
         return result;
     }
 
+    @Override
     public String toStringPartly() {
         return "Laptop: " + this.name + ", MAC: " + this.macAddress + ", IP: " + this.publicIP + "\n";
     }
@@ -326,5 +327,10 @@ public class Laptop extends NetworkDevice {
 
         System.out.println("-- Message: ");
         System.out.println(target.getContentData());
+    }
+    
+    @Override
+    public String toStringSaveInFile() {
+        return "Laptop:" + this.name + "," + this.macAddress + "," + this.publicIP;
     }
 }

@@ -70,5 +70,7 @@ public abstract class NetworkDevice implements Comparable<NetworkDevice> {
         return "NetworkDevice{" + "name: " + name + ", macAddress: " + macAddress + ", publicIP: " + publicIP + '}';
     }
     
+    public abstract String toStringPartly();
     
+    public abstract String toStringSaveInFile();
 }

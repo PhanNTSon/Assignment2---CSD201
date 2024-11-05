@@ -63,14 +63,13 @@ public class Router extends NetworkDevice {
             this.forwardData(respond);
             return;
         }
-
+        System.out.println("Hop on: " + this.name + ", " + this.publicIP);
         if (packet.getDestIP().equalsIgnoreCase(this.publicIP)) {
             DataPacket respond = new DataPacket(this.publicIP, packet.getSrcIP(), 50);
             respond.setContentData("Ping successfully. Router " + this.name + ""
                     + ", IP: " + this.publicIP);
             this.forwardData(respond);
         } else {
-            System.out.println("Hop on: " + this.name + ", " + this.publicIP);
 
             this.forwardData(packet);
         }
@@ -248,7 +247,14 @@ public class Router extends NetworkDevice {
         return result;
     }
 
+    @Override
     public String toStringPartly() {
         return "Router: " + this.name + ", MAC: " + this.macAddress + ", IP: " + this.publicIP + "\n";
     }
+
+    @Override
+    public String toStringSaveInFile() {
+        return "Router:" + this.name + "," + this.macAddress + "," + this.publicIP;
+    }
+
 }
