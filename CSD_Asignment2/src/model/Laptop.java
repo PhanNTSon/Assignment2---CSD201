@@ -265,6 +265,7 @@ public class Laptop extends NetworkDevice {
                     + ", IP: " + entry.getKey().getPublicIP()
                     + " [Latency: " + entry.getValue().getLatency() + "(ms)"
                     + ", Bandwidth: " + entry.getValue().getBandwith()
+                    + ", Weight: " + entry.getValue().getWeight()
                     + "]\n";
         }
         return result;
